@@ -42,7 +42,7 @@ static const char *const autostart[] = {
 	"bash", "/home/deluxerpanda/.screenlayout/default.sh", NULL,
 	"flameshot", NULL,
 	"goxlr-launcher", NULL,
-	"chatterino", NULL,
+	"flatpak", "run", "com.chatterino.chatterino", NULL,
 	"picom", "--animations", "-b", NULL,
 	"sh", "-c", "feh --randomize --bg-fill ~/Bilder/backgrounds/*", NULL,
 	"slstatus", NULL,
@@ -60,8 +60,8 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
-	{ "kitty",   NULL,     NULL,           0,         0,          1,           0,        -1 },
-	{ "chatterino",NULL,   NULL,           0,         0,          0,           0,        1 },
+	{ "st",   NULL,     NULL,           0,         0,          1,           0,        -1 },
+	{ "chatterino",NULL,   NULL,           0,         0,          0,           0,        2 },
 	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
 };
 
@@ -92,7 +92,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static const char *dmenucmd[] = { "rofi", "-show", "drun", NULL };
-static const char *termcmd[]  = { "kitty", NULL };
+static const char *termcmd[]  = { "st", NULL };
 
 static Key keys[] = {
 	/*modifier             key              function        argument */
@@ -113,7 +113,7 @@ static Key keys[] = {
 
 	{ MODKEY|ShiftMask,XK_b,  togglebar,     {0} },
 	{ MODKEY|ShiftMask,XK_Tab,tagmon,      {.i = +1 } },
-	{ MODKEY|ShiftMask,XK_F12,spawn,       SHCMD ("kitty -e nm-connection-editor")},
+	{ MODKEY|ShiftMask,XK_F12,spawn,       SHCMD ("st -e nm-connection-editor")},
 
 	{ MODKEY|AltMask,XK_s,         spawn,         SHCMD ("$HOME/.screenlayout/default.sh")},
 
