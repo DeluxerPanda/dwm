@@ -36,6 +36,8 @@ static const unsigned int alphas[][3]      = {
 };
 
 static const char *const autostart[] = {
+	"xset", "s", "off", NULL,
+	"xset", "-dpms", NULL,
 	"bash", "/home/deluxerpanda/.screenlayout/default.sh", NULL,
 	"flameshot", NULL,
 	"goxlr-launcher", NULL,
