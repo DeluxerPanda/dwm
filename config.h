@@ -36,14 +36,11 @@ static const unsigned int alphas[][3]      = {
 };
 
 static const char *const autostart[] = {
-    "xset", "s", "off", NULL,
-    "xset", "s", "noblank", NULL,
-    "xset", "-dpms", NULL,
 	"bash", "/home/deluxerpanda/.screenlayout/default.sh", NULL,
 	"flameshot", NULL,
 	"goxlr-launcher", NULL,
-	"flatpak", "run", "com.chatterino.chatterino", NULL,
-	"picom", "--animations", "-b", NULL,
+	"chatterino", NULL,
+	"picom", NULL,
 	"sh", "-c", "feh --randomize --bg-fill ~/Bilder/backgrounds/*", NULL,
 	"slstatus", NULL,
 	"nm-applet", NULL,
@@ -60,8 +57,7 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
-	{ "st",   NULL,     NULL,           0,         0,          1,           0,        -1 },
-	{ "chatterino",NULL,   NULL,           0,         0,          0,           0,        2 },
+	{ "chatterino",NULL,   NULL,           0,         0,          0,           0,        1 },
 	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
 };
 
@@ -71,12 +67,14 @@ static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
 
+
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "",      tile },    /* first entry is default */
 	{ "",      NULL },    /* no layout function means floating behavior */
 	{ "",      monocle },
 };
+
 
 /* key definitions */
 #define MODKEY Mod4Mask
@@ -117,7 +115,7 @@ static Key keys[] = {
 
 	{ MODKEY|AltMask,XK_s,         spawn,         SHCMD ("$HOME/.screenlayout/default.sh")},
 
-	{ MODKEY|ControlMask,XK_q,spawn,       SHCMD("$HOME/.config/rofi/powermenu.sh")},
+	{ MODKEY|ControlMask,XK_q,spawn,       SHCMD("poweroff")},
 
 	{ MODKEY|ControlMask|ShiftMask,XK_q,quit,{0} },
 
