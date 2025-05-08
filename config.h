@@ -7,14 +7,12 @@ static const unsigned int snap      = 26;       /* snap pixel */
 static const int swallowfloating    = 1;        /* 1 means swallow floating windows by default */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
+static const unsigned int systraypinning = 1;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayspacing = 5;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
 static const int showsystray             = 1;   /* 0 means no systray */
-//static const unsigned int baralpha = 0xd0;
-//static const unsigned int borderalpha = OPAQUE;
-static const unsigned int baralpha = 0x80;  // More transparent bar
-static const unsigned int borderalpha = 0x80;  // More transparent borders
+static const unsigned int baralpha = 0x80;
+static const unsigned int borderalpha = 0x80;
 #define ICONSIZE 17   /* icon size */
 #define ICONSPACING 5 /* space between icon and title */
 static const char *fonts[]                = { "JetBrainsMonoNL Nerd Font Mono:size=16", "NotoColorEmoji:pixelsize=16:antialias=true:autohint=true"  };
@@ -41,11 +39,11 @@ static const char *const autostart[] = {
 	"flameshot", NULL,
 	"goxlr-daemon", NULL,
 	"kdeconnectd", NULL,
-	//"chatterino", NULL,
 	"picom", NULL,
 	"sh", "-c", "feh --randomize --bg-fill ~/Bilder/backgrounds/*", NULL,
 	"nm-applet", NULL,
 	"slstatus", NULL,
+	//"chatterino", NULL,
 	NULL /* terminate */
 };
 
@@ -59,8 +57,8 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
-	{ "chatterino",NULL,   NULL,           0,         0,          0,           0,        1 },
-	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
+	{ "firefox", NULL,      "Bild-i-bild", 0,         1,          0,           1,        1 },
+	{  NULL,      NULL,     "Event Tester",0,         0,          0,           1,        -1 }, /* xev */
 };
 
 /* layout(s) */
@@ -91,45 +89,36 @@ static const Layout layouts[] = {
 /* commands */
 static const char *dmenucmd[] = { "rofi", "-show", "drun", NULL };
 static const char *termcmd[]  = { "st", NULL };
+static const char *looking_glass_client[] = {"looking-glass-client","-F", NULL};
 
 static Key keys[] = {
 	/*modifier             key              function        argument */
-	{ MODKEY,         XK_r,           spawn,         {.v = dmenucmd} },
-	{ MODKEY,         XK_x,          spawn,         {.v = termcmd } },
-	{ MODKEY,         XK_b,          spawn,         SHCMD ("xdg-open https://")},
-	{ MODKEY,         XK_e,          spawn,         SHCMD ("xdg-open .")},
-	{ MODKEY,         XK_w,         spawn,         SHCMD ("looking-glass-client -F")},
-	{ MODKEY,         XK_h,          setmfact,      {.f = -0.05} },
-	{ MODKEY,         XK_l,           setmfact,      {.f = +0.05} },
-	{ MODKEY,         XK_q,          killclient,       {0} },
-	{ MODKEY,         XK_t,           setlayout,     {.v = &layouts[0]} },
-	{ MODKEY,         XK_Tab,      zoom,          {0} },
-	{ MODKEY,         XK_f,           fullscreen,   {0} },
+	{ MODKEY,              XK_r,            spawn,          {.v = dmenucmd} },
+	{ MODKEY,              XK_x,            spawn,          {.v = termcmd} },
+	{ MODKEY,              XK_w,            spawn,          {.v = looking_glass_client} },
+	{ MODKEY,              XK_b,            spawn,          SHCMD ("xdg-open https://") },
+	{ MODKEY,              XK_e,            spawn,          SHCMD ("xdg-open .") },
+	{ MODKEY,              XK_h,            setmfact,       {.f = -0.05} },
+	{ MODKEY,              XK_l,            setmfact,       {.f = +0.05} },
+	{ MODKEY,              XK_q,            killclient,     {0} },
+	{ MODKEY,              XK_t,            setlayout,      {.v = &layouts[0]} },
+	{ MODKEY,              XK_Tab,          zoom,           {0} },
+	{ MODKEY,              XK_f,            fullscreen,     {0} },
+	{ MODKEY|ShiftMask,XK_Tab,				tagmon,		    {.i = +1 } },
+	{ MODKEY|ControlMask|ShiftMask,XK_s,    spawn,          SHCMD ("$HOME/.screenlayout/default.sh")},
+	{ MODKEY|ControlMask|ShiftMask,XK_q,    quit,           {0} },
 
-	{ 0,                      0x1008ff11, spawn,        SHCMD("amixer sset Master 5%") },
-	{ 0,                      0x1008ff13, spawn,        SHCMD("amixer sset Master 5%") },
-
-	{ MODKEY|ShiftMask,XK_b,  togglebar,     {0} },
-	{ MODKEY|ShiftMask,XK_Tab,tagmon,      {.i = +1 } },
-	{ MODKEY|ShiftMask,XK_F12,spawn,       SHCMD ("st -e nm-connection-editor")},
-
-	{ MODKEY|AltMask,XK_s,         spawn,         SHCMD ("$HOME/.screenlayout/default.sh")},
-
-	{ MODKEY|ControlMask,XK_q,spawn,       SHCMD("poweroff")},
-
-	{ MODKEY|ControlMask|ShiftMask,XK_q,quit,{0} },
-
-	TAGKEYS(          XK_1,                               0)
-	TAGKEYS(          XK_2,                               1)
-	TAGKEYS(          XK_3,                               2)
-	TAGKEYS(          XK_4,                               3)
-	TAGKEYS(          XK_5,                               4)
+	
+	TAGKEYS(          	   XK_1,                            0)
+	TAGKEYS(          	   XK_2,                            1)
+	TAGKEYS(          	   XK_3,                            2)
+	TAGKEYS(          	   XK_4,                            3)
+	TAGKEYS(          	   XK_5,                            4)
 };
 
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static Button buttons[] = {
 	/* click                event mask      button          function        argument */
-	{ ClkClientWin, MODKEY,       Button1,       moveorplace,{.i = 2} },
-	{ ClkTagBar,     0,                       Button1,       view,            {0} },
+	{ ClkTagBar,            0,              Button1,        view,           {0} },
 };
