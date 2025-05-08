@@ -1831,16 +1831,14 @@ restack(Monitor *m)
 void
 run(void)
 {
-    XEvent ev;
-
-    while (running) {
-        while (XPending(dpy)) {
-            XNextEvent(dpy, &ev);
-            if (handler[ev.type])
-                handler[ev.type](&ev);
-        }
-    }
+	XEvent ev;
+	/* main event loop */
+	XSync(dpy, False);
+	while (running && !XNextEvent(dpy, &ev))
+		if (handler[ev.type])
+			handler[ev.type](&ev); /* call handler */
 }
+
 
 void
 scan(void)

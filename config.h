@@ -39,14 +39,15 @@ static const char *const autostart[] = {
 	"xset", "-dpms", NULL,
 	"bash", "/home/deluxerpanda/.screenlayout/default.sh", NULL,
 	"flameshot", NULL,
-	"goxlr-launcher", NULL,
-	"chatterino", NULL,
+	"goxlr-daemon", NULL,
+	"kdeconnectd", NULL,
+	//"chatterino", NULL,
 	"picom", NULL,
 	"sh", "-c", "feh --randomize --bg-fill ~/Bilder/backgrounds/*", NULL,
 	"nm-applet", NULL,
+	"slstatus", NULL,
 	NULL /* terminate */
 };
-	// "slstatus", NULL,
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5" };
