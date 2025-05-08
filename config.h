@@ -2,7 +2,7 @@
 
 /* appearance */
 static const unsigned int refresh_rate    = 60;     /* matches dwm's mouse event processing to your monitor's refresh rate for smoother window interactions */
-static const unsigned int borderpx  = 0;        /* border pixel of windows */
+static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int snap      = 26;       /* snap pixel */
 static const int swallowfloating    = 1;        /* 1 means swallow floating windows by default */
 static const int showbar            = 1;        /* 0 means no bar */
@@ -18,14 +18,13 @@ static const unsigned int borderalpha = 0x80;  // More transparent borders
 #define ICONSIZE 17   /* icon size */
 #define ICONSPACING 5 /* space between icon and title */
 static const char *fonts[]                = { "JetBrainsMonoNL Nerd Font Mono:size=16", "NotoColorEmoji:pixelsize=16:antialias=true:autohint=true"  };
-static const char col_bg[]       = "#222222";
-static const char col_sel[]       = "#cba6f7";
+static const char col_bg[]       = "#494d64";
+static const char col_sel[]       = "#c6a0f6";
 static const char col_text[]       = "#ffffff";
-static const char col_cyan[]        = "#00FFFF";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_text, col_bg, col_cyan },
-	[SchemeSel]  = { col_sel, col_bg,  col_cyan  },
+	[SchemeNorm] = { col_text, col_bg, col_bg },
+	[SchemeSel]  = { col_sel, col_bg,  col_sel  },
 };
 
 
@@ -44,10 +43,10 @@ static const char *const autostart[] = {
 	"chatterino", NULL,
 	"picom", NULL,
 	"sh", "-c", "feh --randomize --bg-fill ~/Bilder/backgrounds/*", NULL,
-	"slstatus", NULL,
 	"nm-applet", NULL,
 	NULL /* terminate */
 };
+	// "slstatus", NULL,
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5" };
@@ -72,9 +71,7 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "",      tile },    /* first entry is default */
-	{ "",      NULL },    /* no layout function means floating behavior */
-	{ "",      monocle },
+	{ "🐼",      tile },
 };
 
 
