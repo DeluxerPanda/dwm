@@ -822,7 +822,7 @@ drawbar(Monitor *m)
 	/* draw status first so it can be overdrawn by tags later */
 	if (m == selmon) { /* status is only drawn on selected monitor */
 		drw_setscheme(drw, scheme[SchemeNorm]);
-		tw = TEXTW(stext) - lrpad / 2 + 25; /* 2px extra right padding */
+		tw = TEXTW(stext) - lrpad / 2 + 35; /* 2px extra right padding */
 		drw_text(drw, m->ww - tw - stw, 0, tw, bh, lrpad / 2 - 2, stext, 0);
 
 	} 
@@ -1454,7 +1454,7 @@ void
 resizebarwin(Monitor *m) {
 	unsigned int w = m->ww - 2 * sp;
 	if (showsystray && m == systraytomon(m) && !systrayonleft)
-		w -= getsystraywidth();
+		w -= getsystraywidth() + 10;
 	XMoveResizeWindow(dpy, m->barwin, m->wx + sp, m->by + vp, w, bh);
 }
 
