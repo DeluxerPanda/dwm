@@ -71,7 +71,7 @@
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
-enum { SchemeNorm, SchemeSel, SchemeTitel}; /* color schemes */
+enum { SchemeNorm, SchemeSel, SchemeUrl}; /* color schemes */
 enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
        NetSystemTray, NetSystemTrayOP, NetSystemTrayOrientation, NetSystemTrayOrientationHorz,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
@@ -191,7 +191,6 @@ static void enternotify(XEvent *e);
 static void expose(XEvent *e);
 static void focus(Client *c);
 static void focusin(XEvent *e);
-static void focusmon(const Arg *arg);
 static void focusstack(const Arg *arg);
 static Atom getatomprop(Client *c, Atom prop);
 static int getrootptr(int *x, int *y);
@@ -238,7 +237,6 @@ static Monitor *systraytomon(Monitor *m);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void tile(Monitor *m);
-static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
 static void toggletag(const Arg *arg);
 static void toggleview(const Arg *arg);
@@ -846,13 +844,11 @@ drawbar(Monitor *m)
 	}
 	w = TEXTW(m->ltsymbol);
 	drw_setscheme(drw, scheme[SchemeNorm]);
-	// x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
 
 	if ((w = m->ww - tw - stw - x) > bh) {
 		if (m->sel) {
-			//drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
-			drw_setscheme(drw, scheme[SchemeTitel]);
-			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
+			drw_setscheme(drw, scheme[SchemeUrl]);
+			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name,0);
 			if (m->sel->isfloating)
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
 		} else {
@@ -937,20 +933,6 @@ focusin(XEvent *e)
 
 	if (selmon->sel && ev->window != selmon->sel->win)
 		setfocus(selmon->sel);
-}
-
-void
-focusmon(const Arg *arg)
-{
-	Monitor *m;
-
-	if (!mons->next)
-		return;
-	if ((m = dirtomon(arg->i)) == selmon)
-		return;
-	unfocus(selmon->sel, 0);
-	selmon = m;
-	focus(NULL);
 }
 
 void
@@ -1894,33 +1876,15 @@ tagmon(const Arg *arg)
 }
 
 /* Layouts */
-static void dwindle(Monitor *m);
-static void fibonacci(Monitor *m, int s);
 static void tile(Monitor *m);
 /* Internals */
 static void getgaps(Monitor *m, int *oh, int *ov, int *ih, int *iv, unsigned int *nc);
 static void getfacts(Monitor *m, int msize, int ssize, float *mf, float *sf, int *mr, int *sr);
-static void setgaps(int oh, int ov, int ih, int iv);
 
 /* Settings */
 #if !PERTAG_PATCH
 static int enablegaps = 1;
 #endif // PERTAG_PATCH
-
-void
-setgaps(int oh, int ov, int ih, int iv)
-{
-	if (oh < 0) oh = 0;
-	if (ov < 0) ov = 0;
-	if (ih < 0) ih = 0;
-	if (iv < 0) iv = 0;
-
-	selmon->gappoh = oh;
-	selmon->gappov = ov;
-	selmon->gappih = ih;
-	selmon->gappiv = iv;
-	arrange(selmon);
-}
 
 void
 getgaps(Monitor *m, int *oh, int *ov, int *ih, int *iv, unsigned int *nc)
@@ -1969,101 +1933,6 @@ getfacts(Monitor *m, int msize, int ssize, float *mf, float *sf, int *mr, int *s
 	*sr = ssize - stotal; // the remainder (rest) of pixels after an even stack split
 }
 
-/* Layouts */
-
-void
-fibonacci(Monitor *m, int s)
-{
-	unsigned int i, n;
-	int nx, ny, nw, nh;
-	int oh, ov, ih, iv;
-	int nv, hrest = 0, wrest = 0, r = 1;
-	Client *c;
-
-	getgaps(m, &oh, &ov, &ih, &iv, &n);
-	if (n == 0)
-		return;
-
-	nx = m->wx + ov;
-	ny = m->wy + oh;
-	nw = m->ww - 2*ov;
-	nh = m->wh - 2*oh;
-
-	for (i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next)) {
-		if (r) {
-			if ((i % 2 && (nh - ih) / 2 <= (bh + 2*c->bw))
-			   || (!(i % 2) && (nw - iv) / 2 <= (bh + 2*c->bw))) {
-				r = 0;
-			}
-			if (r && i < n - 1) {
-				if (i % 2) {
-					nv = (nh - ih) / 2;
-					hrest = nh - 2*nv - ih;
-					nh = nv;
-				} else {
-					nv = (nw - iv) / 2;
-					wrest = nw - 2*nv - iv;
-					nw = nv;
-				}
-
-				if ((i % 4) == 2 && !s)
-					nx += nw + iv;
-				else if ((i % 4) == 3 && !s)
-					ny += nh + ih;
-			}
-
-			if ((i % 4) == 0) {
-				if (s) {
-					ny += nh + ih;
-					nh += hrest;
-				}
-				else {
-					nh -= hrest;
-					ny -= nh + ih;
-				}
-			}
-			else if ((i % 4) == 1) {
-				nx += nw + iv;
-				nw += wrest;
-			}
-			else if ((i % 4) == 2) {
-				ny += nh + ih;
-				nh += hrest;
-				if (i < n - 1)
-					nw += wrest;
-			}
-			else if ((i % 4) == 3) {
-				if (s) {
-					nx += nw + iv;
-					nw -= wrest;
-				} else {
-					nw -= wrest;
-					nx -= nw + iv;
-					nh += hrest;
-				}
-			}
-			if (i == 0)	{
-				if (n != 1) {
-					nw = (m->ww - iv - 2*ov) - (m->ww - iv - 2*ov) * (1 - m->mfact);
-					wrest = 0;
-				}
-				ny = m->wy + oh;
-			}
-			else if (i == 1)
-				nw = m->ww - nw - iv - 2*ov;
-			i++;
-		}
-
-		resize(c, nx, ny, nw - (2*c->bw), nh - (2*c->bw), False);
-	}
-}
-
-void
-dwindle(Monitor *m)
-{
-	fibonacci(m, 1);
-}
-
 /* Default tile layout + gaps */
 
 static void
@@ -2103,27 +1972,6 @@ tile(Monitor *m)
 			resize(c, sx, sy, sw - (2*c->bw), (sh / sfacts) + ((i - m->nmaster) < srest ? 1 : 0) - (2*c->bw), 0);
 			sy += HEIGHT(c) + ih;
 		}
-}
-
-
-void
-togglebar(const Arg *arg)
-{
-	selmon->showbar = !selmon->showbar;
-	updatebarpos(selmon);
-	resizebarwin(selmon);
-	if (showsystray) {
-		XWindowChanges wc;
-		if (!selmon->showbar)
-			wc.y = -bh;
-		else if (selmon->showbar) {
-			wc.y = 0;
-			if (!selmon->topbar)
-				wc.y = selmon->mh - bh;
-		}
-		XConfigureWindow(dpy, systray->win, CWY, &wc);
-	}
-	arrange(selmon);
 }
 
 void
