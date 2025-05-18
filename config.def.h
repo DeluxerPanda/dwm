@@ -17,7 +17,7 @@ static const char col_Sel[]              = "#2e3440";
 static const char col_Norm[]            = "#3b4252";
 static const char *colors[][3]           = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_white, col_Norm, col_Yellow },
+	[SchemeNorm] = { col_white, col_Norm, col_Norm },
 	[SchemeSel]  = { col_white, col_Sel,  col_Yellow  },
 	[SchemeURL]  = { col_white, col_Sel,  col_Yellow  },
 };
