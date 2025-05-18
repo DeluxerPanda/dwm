@@ -1,32 +1,25 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 5;        /* border pixel of windows */
-static const unsigned int snap      = 32;       /* snap pixel */
+static const unsigned int borderpx       = 2;        /* border pixel of windows */
+static const unsigned int snap           = 32;       /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
-static const unsigned int systrayonleft = 0;    /* 0: systray in the right corner, >0: systray on left of status text */
-static const unsigned int systrayspacing = 4;   /* systray spacing */
+static const unsigned int systrayonleft  = 0;    /* 0: systray in the right corner, >0: systray on left of status text */
+static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
-static const int showsystray        = 1;        /* 0 means no systray */
-static const unsigned int gappih    = 5;       /* horiz inner gap between windows */
-static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
-static const unsigned int gappoh    = 20;       /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov    = 30;       /* vert outer gap between windows and screen edge */
-static       int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
-static const int showbar            = 1;        /* 0 means no bar */
-static const int topbar             = 1;        /* 0 means bottom bar */
-static const int vertpad            = 10;       /* vertical padding of bar */
-static const int sidepad            = 10;       /* horizontal padding of bar */
-static const char *fonts[]          = { "JetBrainsMonoNL Nerd Font Mono:size=16", "NotoColorEmoji:pixelsize=16:antialias=true:autohint=true" };
-static const char col_bg[]       = "#494d64";
-static const char col_sel[]       = "#c6a0f6";
-static const char col_text[]       = "#ffffff";
-static const char *colors[][3]      = {
+static const int showsystray             = 1;        /* 0 means no systray */
+static const int showbar                 = 1;        /* 0 means no bar */
+static const int topbar                  = 1;        /* 0 means bottom bar */
+static const char *fonts[]               = { "monospace:size=14" };
+static const char col_white[]           = "#eceff4";
+static const char col_Yellow[]           = "#ebcb8b";
+static const char col_Sel[]              = "#2e3440";
+static const char col_Norm[]            = "#3b4252";
+static const char *colors[][3]           = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_text, col_bg, col_bg },
-	[SchemeSel]  = { col_sel, col_bg, col_sel },
-    [SchemeUrl] = { col_text,col_bg,  col_bg },
-
+	[SchemeNorm] = { col_white, col_Norm, col_Yellow },
+	[SchemeSel]  = { col_white, col_Sel,  col_Yellow  },
+	[SchemeURL]  = { col_white, col_Sel,  col_Yellow  },
 };
 
 /* tagging */
@@ -37,9 +30,9 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask    monitor */
-	{ "firefox", NULL,      "Bild-i-bild", 0,          1 },
-	{  NULL,      NULL,     "Event Tester",0,          -1 }, /* xev */
+	/* class      instance    title         tags mask   isfloating    monitor */
+	{ "firefox",  NULL,      "Bild-i-bild", 0,          1             -1 },
+	{ NULL,       NULL,      "Event Tester", 0,         0,            -1 }, /* xev */
 };
 
 /* layout(s) */
@@ -50,11 +43,11 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[]=",      tile },    /* first entry is default */
+	{ "",      tile },    /* first entry is default */
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
 };
-//#include "vanitygaps.c"
+
 /* key definitions */
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
@@ -80,18 +73,15 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_b,      spawn,          {.v = browser } },
 	{ MODKEY,                       XK_e,      spawn,          {.v = filemanager } },
 	{ MODKEY,                       XK_w,      spawn,          {.v = looking_glass_client } },
-	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
-	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
-	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
 	{ MODKEY,                       XK_Tab,    zoom,           {0} },
-	{ MODKEY,                       XK_f,      togglefullscreen,     {0} },
+	{ MODKEY,                       XK_f,      togglefullscr,     {0} },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
-        { MODKEY|ShiftMask,             XK_Tab,	   tagmon,         {.i = +1 } },
+    { MODKEY|ShiftMask,             XK_Tab,	   tagmon,         {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_f,  	   togglefloating, {0} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
