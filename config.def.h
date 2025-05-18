@@ -10,11 +10,11 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray             = 1;        /* 0 means no systray */
 static const int showbar                 = 1;        /* 0 means no bar */
 static const int topbar                  = 1;        /* 0 means bottom bar */
-static const char *fonts[]               = { "monospace:size=14" };
-static const char col_white[]           = "#eceff4";
+static const char *fonts[]               = { "monospace:size=10" };
+static const char col_white[]            = "#eceff4";
 static const char col_Yellow[]           = "#ebcb8b";
 static const char col_Sel[]              = "#2e3440";
-static const char col_Norm[]            = "#3b4252";
+static const char col_Norm[]             = "#3b4252";
 static const char *colors[][3]           = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_white, col_Norm, col_Norm },
@@ -30,9 +30,9 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title         tags mask   isfloating    monitor */
-	{ "firefox",  NULL,      "Bild-i-bild", 0,          1             -1 },
-	{ NULL,       NULL,      "Event Tester", 0,         0,            -1 }, /* xev */
+	/* class      instance    title          tags mask   isfloating    monitor */
+	{ "firefox",  NULL,       "Bild-i-bild", 0,          1,            -1 },
+	{ NULL,       NULL,       "Event Tester",0,          0,            -1 }, /* xev */
 };
 
 /* layout(s) */
