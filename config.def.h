@@ -65,6 +65,7 @@ static const char *termcmd[]  = { "st", NULL };
 static const char *browser[]  = { "xdg-open", "https://", NULL };
 static const char *filemanager[]  = { "xdg-open",".", NULL };
 static const char *looking_glass_client[] = {"looking-glass-client","-F", NULL};
+static const char *displays[] = {"sh", "-c", "$HOME/.screenlayout/default.sh", NULL};
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -73,6 +74,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_b,      spawn,          {.v = browser } },
 	{ MODKEY,                       XK_e,      spawn,          {.v = filemanager } },
 	{ MODKEY,                       XK_w,      spawn,          {.v = looking_glass_client } },
+	{ MODKEY|ShiftMask,		XK_s,      spawn,          {.v = displays } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
 	{ MODKEY,                       XK_Tab,    zoom,           {0} },
@@ -80,7 +82,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_q,      killclient,     {0} },
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
-    { MODKEY|ShiftMask,             XK_Tab,	   tagmon,         {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_Tab,	   tagmon,         {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_f,  	   togglefloating, {0} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
