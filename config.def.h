@@ -61,7 +61,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static const char *dmenucmd[] = { "rofi", "-show", "drun", NULL };
-static const char *termcmd[]  = { "st", NULL };
+static const char *termcmd[]  = { "kitty", NULL };
 static const char *browser[]  = { "xdg-open", "https://", NULL };
 static const char *filemanager[]  = { "xdg-open",".", NULL };
 static const char *looking_glass_client[] = {"looking-glass-client","-F", NULL};
