@@ -12,14 +12,14 @@ static const int showbar                 = 1;        /* 0 means no bar */
 static const int topbar                  = 1;        /* 0 means bottom bar */
 static const char *fonts[]               = { "monospace:size=10" };
 static const char col_white[]            = "#eceff4";
-static const char col_Yellow[]           = "#ebcb8b";
+static const char col_Cyan[]             = "#00FFFF";
 static const char col_Sel[]              = "#2e3440";
 static const char col_Norm[]             = "#3b4252";
 static const char *colors[][3]           = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_white, col_Norm, col_Norm },
-	[SchemeSel]  = { col_white, col_Sel,  col_Yellow  },
-	[SchemeURL]  = { col_white, col_Sel,  col_Yellow  },
+	[SchemeSel]  = { col_white, col_Sel,  col_Cyan  },
+	[SchemeURL]  = { col_white, col_Sel,  col_Cyan  },
 };
 
 /* tagging */
@@ -43,7 +43,7 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "",      tile },    /* first entry is default */
+	{ "",         tile },    /* first entry is default */
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
 };
@@ -61,7 +61,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static const char *dmenucmd[] = { "rofi", "-show", "drun", NULL };
-static const char *termcmd[]  = { "kitty", NULL };
+static const char *termcmd[]  = { "st", NULL };
 static const char *browser[]  = { "xdg-open", "https://", NULL };
 static const char *filemanager[]  = { "xdg-open",".", NULL };
 static const char *looking_glass_client[] = {"looking-glass-client","-F", NULL};
