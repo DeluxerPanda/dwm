@@ -65,7 +65,7 @@ static const char *termcmd[]  = { "st", NULL };
 static const char *browser[]  = { "xdg-open", "https://", NULL };
 static const char *filemanager[]  = { "xdg-open",".", NULL };
 static const char *looking_glass_client[] = {"looking-glass-client","-F", NULL};
-static const char *displays[] = {"sh", "-c", "$HOME/.screenlayout/default.sh", NULL};
+static const char *displays[] = {"sh", "-c", "$HOME/scripts/screenlayout_default.sh", NULL};
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
