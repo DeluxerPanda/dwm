@@ -10,20 +10,21 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray             = 1;        /* 0 means no systray */
 static const int showbar                 = 1;        /* 0 means no bar */
 static const int topbar                  = 1;        /* 0 means bottom bar */
-static const char *fonts[]                = { "JetBrainsMonoNL Nerd Font Mono:size=16", "NotoColorEmoji:pixelsize=16:antialias=true:autohint=true"  };
-static const char col_white[]            = "#eceff4";
-static const char col_Cyan[]             = "#00FFFF";
-static const char col_Sel[]              = "#2e3440";
-static const char col_Norm[]             = "#3b4252";
-static const char *colors[][3]           = {
+static const char *fonts[]                = { "JetBrainsMonoNL Nerd Font Mono:size=14:antialias=true:autohint=true:hintstyle=hintfull", "NotoColorEmoji:size=12:antialias=true:autohint=true" };
+static const char col_white[] = "#cad3f5";
+static const char col_Cyan[]  = "#f5bde6";
+static const char col_Sel[]  = "#3b4252";
+static const char col_Norm[]   = "#24273a"; 
+
+static const char *colors[][3] = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_white, col_Norm, col_Norm },
-	[SchemeSel]  = { col_white, col_Sel,  col_Cyan  },
-	[SchemeURL]  = { col_white, col_Sel,  col_Cyan  },
+	[SchemeSel]  = { col_white, col_Sel,  col_Cyan },
+	[SchemeURL]  = { col_white, col_Sel,  col_Cyan },
 };
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { "󰬺", "󰬻", "󰬼", "󰬽", "󰬾"};
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -61,7 +62,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static const char *dmenucmd[] = { "rofi", "-show", "drun", NULL };
-static const char *termcmd[]  = { "kitty", NULL };
+static const char *termcmd[]  = { "st", NULL };
 static const char *browser[]  = { "xdg-open", "https://", NULL };
 static const char *filemanager[]  = { "xdg-open",".", NULL };
 static const char *looking_glass_client[] = {"looking-glass-client","-F", NULL};
@@ -89,10 +90,6 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_3,                      2)
 	TAGKEYS(                        XK_4,                      3)
 	TAGKEYS(                        XK_5,                      4)
-	TAGKEYS(                        XK_6,                      5)
-	TAGKEYS(                        XK_7,                      6)
-	TAGKEYS(                        XK_8,                      7)
-	TAGKEYS(                        XK_9,                      8)
 };
 
 /* button definitions */
