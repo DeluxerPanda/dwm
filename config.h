@@ -84,6 +84,11 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_Tab,	   tagmon,         {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_f,  	   togglefloating, {0} },
+	{ 0,                            XF86XK_MonBrightnessUp,spawn,SHCMD ("brightnessctl set 10%+")},
+    { 0,                            XF86XK_MonBrightnessDown,spawn,SHCMD ("brightnessctl set 10%-")},
+    { 0,                            XF86XK_AudioLowerVolume,spawn,SHCMD ("amixer sset Master 5%- unmute")},
+    { 0,                            XF86XK_AudioMute,spawn,SHCMD ("amixer sset Master $(amixer get Master | grep -q '\\[on\\]' && echo 'mute' || echo 'unmute')")},
+    { 0,                            XF86XK_AudioRaiseVolume,spawn,SHCMD ("amixer sset Master 5%+ unmute")},
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
