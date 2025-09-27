@@ -1,7 +1,7 @@
 # ⚠️ **VARNING!**  
 
 <span style="color:red;">Detta script körs på egen risk!</span>  
-Vi tar inget ansvar för eventuella skador eller dataförluster.  
+Jag tar inget ansvar för eventuella skador eller dataförluster.  
 
 > **Viktigt:** Se till att du förstår konsekvenserna innan du fortsätter.
 
@@ -10,11 +10,11 @@ Vi tar inget ansvar för eventuella skador eller dataförluster.
 # Installera
 # klona repot
 ```
-git clone https://github.com/DeluxerPanda/Delux-dwm.git
+git clone https://github.com/DeluxerPanda/dwm.git
 ```
 # Gå till det klonade repot
 ```
-cd Delux-dwm
+cd dwm
 ```
 # Gör installationsskriptet körbart
 ```
