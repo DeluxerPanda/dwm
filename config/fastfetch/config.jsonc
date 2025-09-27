@@ -1,0 +1,103 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+"display": {
+"separator": " 󰑃  ",
+"color":"green"
+},
+  "modules": [
+        {
+            "type": "os",
+            "key": " ",
+            "format": "┏━━━━━━━━━━━━━━━━━━ \u001b[1m{2}\u001b[0m ━━━━━━━━━━━━━━━━━━┓"
+        },
+        {
+            "type": "cpu",
+            "key": "  "
+        },
+        {
+            "type": "gpu",
+
+            "key": "  "
+        },
+        {
+            "type": "disk",
+            "key": "  "
+        },
+        {
+            "type": "custom", // SoftwareStart
+            "format": "┣━━━━━━━━━━━━━ \u001b[1mSoftware Information\u001b[0m ━━━━━━━━━━━━━┫"
+        },
+        {
+            "type": "packages",
+            "key": "  󰏖"
+        },
+        {
+            "type": "de",
+            "key": "  "
+        },
+        {
+            "type": "wm",
+            "key": "  "
+        },
+        {
+            "type": "terminal",
+            "key": "  "
+        },
+        {
+            "type": "custom",
+            "format": "┣━━━━━━━━━━━━━━━━━ \u001b[1mUptime / Age\u001b[0m ━━━━━━━━━━━━━━━━━┫"
+        },
+        {
+            "type": "command",
+            "key": "  OS Age ",
+            "text": "birth_install=$(stat -c %W /); current=$(date +%s); time_progression=$((current - birth_install)); days_difference=$((time_progression / 86400)); echo $days_difference days"
+        },
+        {
+            "type": "uptime",
+            "key": "  Uptime "
+        },
+        {
+            "type": "custom", // InformationEnd
+            "format": "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛"
+        },
+        {
+            "type": "colors",
+            "paddingLeft": 15,
+            "symbol": "circle"
+        }
+    ],
+    "logo": {
+        "source": "~/.config/fastfetch/nonbinary.txt",
+        "type": "file",
+        "color": {
+            "1": "#FCF434",
+            "2": "#FFFFFF",
+            "3": "#9C59D1",
+            "4": "#2C2C2C"
+        }
+    }
+
+}
+// nonbinary
+    // "logo": {
+    //     "source": "~/.config/fastfetch/nonbinary.txt",
+    //     "type": "file",
+    //     "color": {
+    //         "1": "#FCF434",
+    //         "2": "#FFFFFF",
+    //         "3": "#9C59D1",
+    //         "4": "#2C2C2C"
+    //     }
+    // }
+
+
+// Trans
+    // "logo": {
+    //     "source": "~/.config/fastfetch/trans.txt",
+    //     "type": "file",
+    //     "color": {
+    //         "1": "#5BCEFA",
+    //         "2": "#ffc0cb",
+    //         "3": "#FFFFFF"
+    //     }
+    // }

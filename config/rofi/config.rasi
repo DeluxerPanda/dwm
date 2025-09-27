@@ -1,0 +1,11 @@
+configuration{
+    modi: "drun";
+    icon-theme: "Numix";
+    show-icons: true;
+    terminal: "st";
+    drun-display-format: "{icon} {name}";
+    location: 0;
+    disable-history: false;
+    hide-scrollbar: true;
+}
+@theme "catppuccin-mocha.rasi"
