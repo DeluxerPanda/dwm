@@ -2417,9 +2417,17 @@ zoom(const Arg *arg)
 	pop(c);
 }
 
-int
-main(int argc, char *argv[])
-{
+extern int slstatus_main(int argc, char *argv[]);
+
+int 
+main(int argc, char *argv[]) {
+    // Starta slstatus i en tråd/process:
+    if (fork() == 0) {
+        // Barnprocess kör slstatus
+        slstatus_main(argc, argv);
+        exit(0);
+    }
+	
 	if (argc == 2 && !strcmp("-v", argv[1]))
 		die("dwm-"VERSION);
 	else if (argc != 1)
