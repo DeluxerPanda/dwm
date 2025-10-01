@@ -68,7 +68,7 @@ function Installing() {
     sudo pacman -S --needed --noconfirm ttf-jetbrains-mono-nerd noto-fonts-emoji
 
 #programs
-    sudo pacman -S --needed --noconfirm rofi arandr xarchiver mpv firefox pavucontrol feh pcmanfm-gtk3 dunst flameshot wget steam
+    sudo pacman -S --needed --noconfirm rofi arandr xarchiver mpv firefox pavucontrol feh pcmanfm-gtk3 dunst flameshot wget steam prismlauncher
  
 #KDE apps
     sudo pacman -S --needed --noconfirm kdeconnect
@@ -97,6 +97,10 @@ function CopyingFiles() {
     # Backgrounds
     mkdir -p ~/Bilder/backgrounds
     wget -O  ~/Bilder/backgrounds/wallpaper.jpg "https://lh3.googleusercontent.com/pw/AP1GczNr22gSNbdSNq_08trKdHkkswDq1k2PuefBqriaPp86lshFr10RjFqKQ_phn0187riksWgh-ouqn_6-MkHwVb5nIpyCaiH34WCOIywCis8X39gV3q3Fsy_9HZO-he7gxYnjbt7zulTazkiIj4qxyBjY"
+
+    sudo mkdir /mnt/DeluxDrive
+    sudo mkdir /mnt/media
+    sudo mkdir /mnt/Squizzmallow
 
     # Scripts
     mkdir -p ~/scripts
