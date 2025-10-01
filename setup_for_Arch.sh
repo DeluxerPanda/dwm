@@ -68,7 +68,7 @@ function Installing() {
     sudo pacman -S --needed --noconfirm ttf-jetbrains-mono-nerd noto-fonts-emoji
 
 #programs
-    sudo pacman -S --needed --noconfirm rofi arandr xarchiver mpv firefox pavucontrol feh pcmanfm-gtk3 dunst flameshot wget
+    sudo pacman -S --needed --noconfirm rofi arandr xarchiver mpv firefox pavucontrol feh pcmanfm-gtk3 dunst flameshot wget steam
  
 #KDE apps
     sudo pacman -S --needed --noconfirm kdeconnect
@@ -133,6 +133,18 @@ if lspci | grep -i 'vga' | grep -qi 'amd'; then
     sudo cp "$work_dir/config/20-amdgpu.conf" /etc/X11/xorg.conf.d/
 fi
 
+
+if lspci | grep -i 'vga' | grep -qi 'amd' && lspci | grep -i 'vga' | grep -qi 'nvidia'; then
+    sudo pacman -S --needed --noconfirm go
+    git clone https://github.com/HikariKnight/quickpassthrough.git
+    cd quickpassthrough
+    go mod download
+    CGO_ENABLED=0 go build -ldflags="-X github.com/HikariKnight/quickpassthrough/internal/version.Version=$(git rev-parse --short HEAD)" -o quickpassthrough cmd/main.go
+    chmod +x ./quickpassthrough
+    ./quickpassthrough
+fi
+
+
 }
 
 
@@ -167,6 +179,7 @@ function setupAutologin() {
             [nN] | [nN][oO] | [nN][eE][iI][nN] )
                 echo "avslutar..."
                 clear
+                sudo reboot
                 exit
                 ;;
             * )
@@ -199,6 +212,7 @@ EOF"
     sudo systemctl enable getty@tty1
 
     clear
+    sudo reboot
 }
 
 Installing
