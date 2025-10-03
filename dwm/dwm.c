@@ -1917,7 +1917,7 @@ unmanage(Client *c, int destroyed)
 	}
 	free(c);
 	focus(NULL);
-	updateclientlist(void);
+	updateclientlist();
 	arrange(m);
 }
 
