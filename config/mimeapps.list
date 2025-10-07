@@ -1,22 +1,13 @@
 [Default Applications]
-# Web
 x-scheme-handler/http=firefox.desktop
 x-scheme-handler/https=firefox.desktop
 text/html=firefox.desktop
-
-# Text/code files
 text/plain=code.desktop
-
-# File manager
 inode/directory=pcmanfm.desktop
-
-# Images
-image/png=gimp.desktop
-image/jpeg=gimp.desktop
-image/gif=gimp.desktop
-image/webp=gimp.desktop
-
-# Video/Audio
+image/png=feh.desktop
+image/jpeg=feh.desktop
+image/gif=firefox.desktop
+image/webp=feh.desktop
 video/mp4=mpv.desktop
 video/x-matroska=mpv.desktop
 video/x-msvideo=mpv.desktop
@@ -24,14 +15,15 @@ video/webm=mpv.desktop
 audio/mpeg=mpv.desktop
 audio/x-wav=mpv.desktop
 audio/ogg=mpv.desktop
-
-# Archives
 application/zip=xarchiver.desktop
 application/x-tar=xarchiver.desktop
 application/x-bzip2=xarchiver.desktop
 application/x-xz=xarchiver.desktop
 application/x-7z-compressed=xarchiver.desktop
 application/x-rar=xarchiver.desktop
-
-# PDFs (use Firefox unless you install a dedicated reader)
 application/pdf=firefox.desktop
+x-scheme-handler/about=firefox.desktop
+x-scheme-handler/unknown=firefox.desktop
+
+[Added Associations]
+text/plain=code-oss.desktop;
