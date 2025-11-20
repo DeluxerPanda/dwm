@@ -74,7 +74,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_b,      spawn,          {.v = browser } },
 	{ MODKEY,                       XK_e,      spawn,          {.v = filemanager } },
 	{ MODKEY,                       XK_w,      spawn,          {.v = looking_glass_client } },
-	{ MODKEY|ShiftMask,				XK_s,      spawn,          {.v = displays } },
+	{ MODKEY|ShiftMask,		XK_s,      spawn,          {.v = displays } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
 	{ MODKEY,                       XK_Tab,    zoom,           {0} },
