@@ -68,7 +68,7 @@ function Installing() {
     sudo pacman -S --needed --noconfirm ttf-jetbrains-mono-nerd noto-fonts-emoji
 
 #programs
-    sudo pacman -S --needed --noconfirm rofi arandr xarchiver mpv firefox pavucontrol feh pcmanfm-gtk3 dunst flameshot wget steam prismlauncher zip unzip
+    sudo pacman -S --needed --noconfirm rofi arandr xarchiver mpv firefox pavucontrol feh pcmanfm dunst flameshot wget steam prismlauncher zip unzip
  
 #KDE apps
     sudo pacman -S --needed --noconfirm kdeconnect
