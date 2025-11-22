@@ -10,4 +10,4 @@ flameshot &
 nm-applet &
 goxlr-daemon &
 kdeconnectd &
-dbus-run-session -- sh -c 'exec dwm'
+#dbus-run-session -- sh -c 'exec dwm'

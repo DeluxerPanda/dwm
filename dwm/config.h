@@ -12,7 +12,7 @@ static const int showbar                 = 1;        /* 0 means no bar */
 static const int topbar                  = 1;        /* 0 means bottom bar */
 static const char *fonts[]                = { "JetBrainsMonoNL Nerd Font Mono:size=14:antialias=true:autohint=true:hintstyle=hintfull", "NotoColorEmoji:size=12:antialias=true:autohint=true" };
 static const char col_text[] = "#f8f1e7";
-static const char col_border[]  = "#ff7518";
+static const char col_border[]  = "#ff7878"; // Hallween #ff7518
 static const char col_Sel[]   = "#2e1a47";
 static const char col_Norm[]  = "#541c95";
 
