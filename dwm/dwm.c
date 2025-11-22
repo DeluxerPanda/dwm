@@ -1643,6 +1643,9 @@ setup(void)
 	sa.sa_handler = SIG_IGN;
 	sigaction(SIGCHLD, &sa, NULL);
 
+	/* the one line of bloat that would have saved a lot of time for a lot of people */	
+	putenv("_JAVA_AWT_WM_NONREPARENTING=1");
+
 	/* clean up any zombies (inherited from .xinitrc etc) immediately */
 	while (waitpid(-1, NULL, WNOHANG) > 0);
 
