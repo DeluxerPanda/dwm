@@ -23,6 +23,23 @@ static const char *colors[][3] = {
 	[SchemeURL]  = { col_text, col_Sel,  col_border },
 };
 
+static const char *const autostart[] = {
+	"xset s off", NULL,
+	"xset -dpms", NULL,
+    "dbus-update-activation-environment", "--systemd", "--all", NULL,
+    "/usr/lib/mate-polkit/polkit-mate-authentication-agent-1", NULL,
+    "flameshot", NULL,
+    "dunst", NULL,
+	"nm-applet", NULL,
+	"goxlr-daemon", NULL,
+	"kdeconnectd", NULL,
+    "sh", "-c", "feh --randomize --bg-fill $HOME/Bilder/backgrounds/*", NULL,
+    "sh", "-c", "/usr/bin/dex -a", NULL,
+	"sh", "-c", "$HOME/scripts/screenlayout_default.sh", NULL,
+	"sh", "-c", "$HOME/scripts/GoXLR_loopback.sh", NULL,
+    NULL /* terminate */
+};
+
 /* tagging */
 static const char *tags[] = { "󰬺", "󰬻", "󰬼", "󰬽", "󰬾"};
 
