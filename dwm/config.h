@@ -12,7 +12,7 @@ static const int showbar                 = 1;        /* 0 means no bar */
 static const int topbar                  = 1;        /* 0 means bottom bar */
 static const char *fonts[]                = { "JetBrainsMonoNL Nerd Font Mono:size=14:antialias=true:autohint=true:hintstyle=hintfull", "NotoColorEmoji:size=12:antialias=true:autohint=true" };
 static const char col_text[] = "#f8f1e7";
-static const char col_border[]  = "#ff7878"; // Hallween #ff7518
+static const char col_border[]  = "#ff7878"; // Hallween #ff7518 // Crhistmas #ff7878
 static const char col_Sel[]   = "#2e1a47";
 static const char col_Norm[]  = "#541c95";
 
@@ -91,7 +91,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_b,      spawn,          {.v = browser } },
 	{ MODKEY,                       XK_e,      spawn,          {.v = filemanager } },
 	{ MODKEY,                       XK_w,      spawn,          {.v = looking_glass_client } },
-	{ MODKEY|ShiftMask,		XK_s,      spawn,          {.v = displays } },
+	{ MODKEY|ShiftMask,		        XK_s,      spawn,          {.v = displays } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
 	{ MODKEY,                       XK_Tab,    zoom,           {0} },
@@ -101,9 +101,9 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Tab,	   tagmon,         {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_f,  	   togglefloating, {0} },
 	{ 0,                            XF86XK_MonBrightnessUp,spawn,SHCMD ("brightnessctl set 10%+")},
-        { 0,                            XF86XK_MonBrightnessDown,spawn,SHCMD ("brightnessctl set 10%-")},
-        { 0,                            XF86XK_AudioLowerVolume,spawn,SHCMD ("amixer sset Master 5%- unmute")},
-        { 0,                            XF86XK_AudioMute,spawn,SHCMD ("amixer sset Master $(amixer get Master | grep -q '\\[on\\]' && echo 'mute' || echo 'unmute')")},
+    { 0,                            XF86XK_MonBrightnessDown,spawn,SHCMD ("brightnessctl set 10%-")},
+    { 0,                            XF86XK_AudioLowerVolume,spawn,SHCMD ("amixer sset Master 5%- unmute")},
+    { 0,                            XF86XK_AudioMute,spawn,SHCMD ("amixer sset Master $(amixer get Master | grep -q '\\[on\\]' && echo 'mute' || echo 'unmute')")},
 	{ 0,                            XF86XK_AudioRaiseVolume,spawn,SHCMD ("amixer sset Master 5%+ unmute")},
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
