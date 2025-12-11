@@ -1,2 +1,2 @@
 #/etc/udev/rules.d/
-SUBSYSTEM=="input", ATTRS{idVendor}=="1234", ATTRS{idProduct}=="abcd", GROUP="kvm", MODE="0660"
+SUBSYSTEM=="input", OWNER="libvirt-qemu", GROUP="kvm", MODE="0666"
