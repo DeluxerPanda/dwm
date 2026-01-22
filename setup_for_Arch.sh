@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e  # Exit on error
 
 titel_message="
  ██████╗ ███████╗██╗     ██╗   ██╗██╗  ██╗    ██████╗ ██╗    ██╗███╗   ███╗
@@ -9,6 +10,10 @@ titel_message="
  ╚═════╝ ╚══════╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝    ╚═════╝  ╚══╝╚══╝ ╚═╝     ╚═╝                                          
 "
 
+work_dir="$(pwd)"
+USERNAME="$(logname)"
+
+# Helper function to print formatted messages
 print_message() {
     local message="$1"
     local message_length=${#message}
@@ -17,34 +22,38 @@ print_message() {
     printf "%s\n%${spaces}s%s\n%s\n" "$separator" "" "$message" "$separator"
 }
 
-work_dir=$(pwd)
-USERNAME=$(logname)
+# Helper function for yes/no prompts
+prompt_yes_no() {
+    local prompt="$1"
+    while true; do
+        read -p "$prompt (j/n) " jn
+        case "$jn" in
+            [yY] | [jJ] | [sS][oO] | [yY][eE][sS] | [jJ][aA] )
+                return 0
+                ;;
+            [nN] | [nN][oO] | [nN][eE][iI][nN] )
+                return 1
+                ;;
+            * )
+                echo "Ogiltigt svar. Ange 'j' för ja eller 'n' för nej."
+                ;;
+        esac
+    done
+}
 
+# Check if running as root
 if [ "$(id -u)" -eq 0 ]; then
     print_message "$titel_message"
     print_message "Du kan inte köra som root"
     exit 1
-else
-    print_message "$titel_message"
-    print_message "Script starting"
+fi
 
-    while true; do
-        read -p "Vill du köra det här skriptet? (j/n) " jn
-        case $jn in
-            [yY] | [jJ] | [sS][oO] | [yY][eE][sS] | [jJ][aA] )
-                echo "okej, vi fortsätter"
-                break
-                ;;
-            [nN] | [nN][oO] | [nN][eE][iI][nN] )
-                echo "avslutar..."
-                exit
-                ;;
-            * )
-                echo "Ogiltigt svar. Ange 'j' för ja eller 'n' för nej."
-                exit
-                ;;
-        esac
-    done
+print_message "$titel_message"
+print_message "Script starting"
+
+if ! prompt_yes_no "Vill du köra det här skriptet?"; then
+    echo "avslutar..."
+    exit 0
 fi
 
 function Installing() {
@@ -52,43 +61,42 @@ function Installing() {
     print_message "$titel_message"
     print_message "installera paket"
 
-#updateing
+    # Update pacman config
     sudo sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
     sudo sed -i "/\Color/"'s/^#//' /etc/pacman.conf
     grep -q '^ILoveCandy' /etc/pacman.conf || sudo sed -i '/^\[options\]/a ILoveCandy' /etc/pacman.conf
 
     sudo pacman -Sy --noconfirm
-
     sudo pacman -Syu --noconfirm
 
-#system
+    # System packages
     sudo pacman -S --needed --noconfirm base-devel libx11 libxft xorg-server xorg-xinit ffmpeg networkmanager mate-polkit nfs-utils nano usbutils gnome-keyring
 
-#fonts
+    # Fonts
     sudo pacman -S --needed --noconfirm ttf-jetbrains-mono-nerd noto-fonts-emoji
 
-#programs
-    sudo pacman -S --needed --noconfirm rofi arandr xarchiver mpv firefox pavucontrol feh pcmanfm dunst flameshot wget steam prismlauncher zip unzip
- 
-#KDE apps
+    # Programs
+    sudo pacman -S --needed --noconfirm rofi arandr xarchiver mpv firefox pavucontrol feh pcmanfm dunst flameshot wget zip unzip
+
+    # KDE apps
     sudo pacman -S --needed --noconfirm kdeconnect
 
-#terminal stuff 
-    sudo pacman -S --needed --noconfirm starship picom bash-completion bat fastfetch btop
+    # Terminal utilities
+    sudo pacman -S --needed --noconfirm starship bash-completion bat fastfetch btop
 
-# YAY
-git clone https://aur.archlinux.org/yay-bin.git
-cd yay-bin
-makepkg --noconfirm -si
-cd "$work_dir"
-rm -rf yay-bin
+    # Install YAY
+    git clone https://aur.archlinux.org/yay-bin.git
+    cd yay-bin
+    makepkg --noconfirm -si
+    cd "$work_dir"
+    rm -rf yay-bin
 
-
-if lsusb | grep -q "GoXLRMini"; then
-yay -S --needed --noconfirm goxlr-utility
-fi
-
+    # Optional GoXLR support
+    if lsusb | grep -q "GoXLRMini"; then
+        yay -S --needed --noconfirm goxlr-utility
+    fi
 }
+
 function CopyingFiles() {
     clear
     print_message "$titel_message"
@@ -96,68 +104,50 @@ function CopyingFiles() {
 
     # Backgrounds
     mkdir -p ~/Bilder/backgrounds
-    wget -O  ~/Bilder/backgrounds/wallpaper.jpg "https://lh3.googleusercontent.com/pw/AP1GczNr22gSNbdSNq_08trKdHkkswDq1k2PuefBqriaPp86lshFr10RjFqKQ_phn0187riksWgh-ouqn_6-MkHwVb5nIpyCaiH34WCOIywCis8X39gV3q3Fsy_9HZO-he7gxYnjbt7zulTazkiIj4qxyBjY"
+    wget -O ~/Bilder/backgrounds/wallpaper.jpg "https://lh3.googleusercontent.com/pw/AP1GczNr22gSNbdSNq_08trKdHkkswDq1k2PuefBqriaPp86lshFr10RjFqKQ_phn0187riksWgh-ouqn_6-MkHwVb5nIpyCaiH34WCOIywCis8X39gV3q3Fsy_9HZO-he7gxYnjbt7zulTazkiIj4qxyBjY"
 
-    sudo mkdir /mnt/DeluxDrive
-    sudo mkdir /mnt/media
-    sudo mkdir /mnt/Squizzmallow
+    sudo mkdir -p /mnt/DeluxDrive
+    sudo mkdir -p /mnt/media
+    sudo mkdir -p /mnt/Squizzmallow
 
-    # Scripts
-    mkdir -p ~/scripts
-    cp -r "$work_dir"/scripts/ ~/
-
-    # Starship config
+    # Config files
     mkdir -p ~/.config
     cp "$work_dir/config/starship.toml" ~/.config/
-
-    # MimeApps
     cp "$work_dir/config/mimeapps.list" ~/.config/
+    mkdir -p ~/.config/rofi && cp -r "$work_dir/config/rofi/" ~/.config/
+    mkdir -p ~/.config/fastfetch && cp -r "$work_dir/config/fastfetch/" ~/.config/
 
-    # Rofi
-    mkdir -p ~/.config/rofi
-    cp -r "$work_dir"/config/rofi/ ~/.config/
-
-    # FastFetch
-    mkdir -p ~/.config/fastfetch
-    cp -r "$work_dir"/config/fastfetch/ ~/.config/
-
-    # Bash Profile
+    # Shell configs
     cp "$work_dir/config/.bash_profile" ~/.bash_profile
-
-    # Bash RC
     cp "$work_dir/config/.bashrc" ~/.bashrc
-
-    # Xinit RC
     cp "$work_dir/config/.xinitrc" ~/.xinitrc
 
+    # GPU configuration
+    if lspci | grep -i 'vga' | grep -qi 'amd'; then
+        sudo mkdir -p /etc/X11/xorg.conf.d
+        sudo cp "$work_dir/config/20-amdgpu.conf" /etc/X11/xorg.conf.d/
+    fi
 
-if lspci | grep -i 'vga' | grep -qi 'amd'; then
-    # AMD GPU config
-    sudo mkdir -p /etc/X11/xorg.conf.d
-    sudo cp "$work_dir/config/20-amdgpu.conf" /etc/X11/xorg.conf.d/
-fi
-
-
-if lspci | grep -i 'vga' | grep -qi 'amd' && lspci | grep -i 'vga' | grep -qi 'nvidia'; then
-    sudo pacman -S --needed --noconfirm go
-    git clone https://github.com/HikariKnight/quickpassthrough.git
-    cd quickpassthrough
-    go mod download
-    CGO_ENABLED=0 go build -ldflags="-X github.com/HikariKnight/quickpassthrough/internal/version.Version=$(git rev-parse --short HEAD)" -o quickpassthrough cmd/main.go
-    chmod +x ./quickpassthrough
-    ./quickpassthrough
-fi
-
-
+    # Dual GPU setup (AMD + NVIDIA)
+    if lspci | grep -i 'vga' | grep -qi 'amd' && lspci | grep -i 'vga' | grep -qi 'nvidia'; then
+        sudo pacman -S --needed --noconfirm go
+        git clone https://github.com/HikariKnight/quickpassthrough.git
+        cd quickpassthrough
+        go mod download
+        CGO_ENABLED=0 go build -ldflags="-X github.com/HikariKnight/quickpassthrough/internal/version.Version=$(git rev-parse --short HEAD)" -o quickpassthrough cmd/main.go
+        chmod +x ./quickpassthrough
+        ./quickpassthrough
+        cd "$work_dir"
+        rm -rf quickpassthrough
+    fi
 }
-
 
 function buildingPackages() {
     clear
     print_message "$titel_message"
     print_message "Bygger och installerar dwm, st"
     
-    cd "$work_dir"/dwm
+    cd "$work_dir/dwm"
     sudo make clean install
     cd "$work_dir"
 
@@ -168,30 +158,17 @@ function buildingPackages() {
     rm -rf st
 }
 
-configure_DarkMode() {
-        echo "GTK_THEME=Adwaita:dark" | sudo tee -a /etc/environment > /dev/null
+function configure_DarkMode() {
+    echo "GTK_THEME=Adwaita:dark" | sudo tee -a /etc/environment > /dev/null
 }
 
 function setupAutologin() {
-    while true; do
-        read -p "Vill du logga in automatiskt? (j/n) " jn
-        case $jn in
-            [yY] | [jJ] | [sS][oO] | [yY][eE][sS] | [jJ][aA] )
-                echo "okej, vi fortsätter"
-                break
-                ;;
-            [nN] | [nN][oO] | [nN][eE][iI][nN] )
-                echo "avslutar..."
-                clear
-                sudo reboot
-                exit
-                ;;
-            * )
-                echo "Ogiltigt svar. Ange 'j' för ja eller 'n' för nej."
-                exit
-                ;;
-        esac
-    done
+    if ! prompt_yes_no "Vill du logga in automatiskt?"; then
+        echo "avslutar..."
+        clear
+        sudo reboot
+        exit 0
+    fi
 
     clear
     print_message "$titel_message"
@@ -203,11 +180,11 @@ function setupAutologin() {
         exit 1
     fi
 
-    # Create systemd override directory if not exists
+    # Create systemd override directory
     sudo mkdir -p /etc/systemd/system/getty@tty1.service.d
 
     # Write the override configuration
-    sudo bash -c "cat <<'EOF' > /etc/systemd/system/getty@tty1.service.d/override.conf
+    sudo bash -c "cat > /etc/systemd/system/getty@tty1.service.d/override.conf <<EOF
 [Service]
 ExecStart=
 ExecStart=-/usr/bin/agetty --autologin $USERNAME --noclear %I \$TERM
@@ -219,6 +196,7 @@ EOF"
     sudo reboot
 }
 
+# Main execution
 Installing
 CopyingFiles
 buildingPackages
