@@ -70,7 +70,7 @@ function Installing() {
     sudo pacman -Syu --noconfirm
 
     # System packages
-    sudo pacman -S --needed --noconfirm base-devel libx11 libxft xorg-server xorg-xinit ffmpeg networkmanager mate-polkit nfs-utils nano usbutils gnome-keyring
+    sudo pacman -S --needed --noconfirm base-devel libx11 libxft xorg-server xorg-xinit ffmpeg networkmanager mate-polkit nfs-utils nano usbutils gnome-keyring fuse
 
     # Fonts
     sudo pacman -S --needed --noconfirm ttf-jetbrains-mono-nerd noto-fonts-emoji
@@ -124,8 +124,10 @@ function CopyingFiles() {
 
     # GPU configuration
     if lspci | grep -i 'vga' | grep -qi 'amd'; then
+        if prompt_yes_no "Vill du konfigurera AMD GPU som primär?"; then
         sudo mkdir -p /etc/X11/xorg.conf.d
-        sudo cp "$work_dir/config/20-amdgpu.conf" /etc/X11/xorg.conf.d/
+        sudo cp "$work_dir/config/20-amdgpu.conf" /etc/X11/xorg.conf.d/20-amdgpu.conf
+        fi
     fi
 
     # Dual GPU setup (AMD + NVIDIA)
@@ -143,6 +145,11 @@ function CopyingFiles() {
 }
 
 function buildingPackages() {
+    if ! prompt_yes_no "Vill du använda DWM"; then
+        echo "Oki..."
+        clear
+        exit 0
+    fi
     clear
     print_message "$titel_message"
     print_message "Bygger och installerar dwm, st"
@@ -156,9 +163,7 @@ function buildingPackages() {
     sudo make clean install
     cd "$work_dir"
     rm -rf st
-}
 
-function configure_DarkMode() {
     echo "GTK_THEME=Adwaita:dark" | sudo tee -a /etc/environment > /dev/null
 }
 
@@ -200,5 +205,4 @@ EOF"
 Installing
 CopyingFiles
 buildingPackages
-configure_DarkMode
 setupAutologin
