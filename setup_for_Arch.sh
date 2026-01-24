@@ -122,6 +122,9 @@ function CopyingFiles() {
     cp "$work_dir/config/.bashrc" ~/.bashrc
     cp "$work_dir/config/.xinitrc" ~/.xinitrc
 
+    # Dark theme
+    echo "GTK_THEME=Adwaita:dark" | sudo tee -a /etc/environment > /dev/null
+
     # GPU configuration
     if lspci | grep -i 'vga' | grep -qi 'amd'; then
         if prompt_yes_no "Vill du konfigurera AMD GPU som primär?"; then
@@ -145,11 +148,6 @@ function CopyingFiles() {
 }
 
 function buildingPackages() {
-    if ! prompt_yes_no "Vill du använda DWM"; then
-        echo "Oki..."
-        clear
-        exit 0
-    fi
     clear
     print_message "$titel_message"
     print_message "Bygger och installerar dwm, st"
@@ -163,8 +161,6 @@ function buildingPackages() {
     sudo make clean install
     cd "$work_dir"
     rm -rf st
-
-    echo "GTK_THEME=Adwaita:dark" | sudo tee -a /etc/environment > /dev/null
 }
 
 function setupAutologin() {
