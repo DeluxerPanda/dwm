@@ -20,14 +20,14 @@ for i in {1..30}; do
     Source=$(pactl list short sources | while read -r line; do
         name=$(echo "$line" | awk '{print $2}')
         index=$(echo "$line" | awk '{print $1}')
-        desc=$(pactl list sources | awk -v idx="Source #$index" -v RS="" '$0 ~ idx {print}' | grep -i "Description" | cut -d: -f2-)
+        desc=$(pactl list sources | awk -v idx="Source #$index" -v RS="" '$0 ~ idx {print}' | grep -i "GoXLRMini Broadcast Stream Mix" | cut -d: -f2-)
         if echo "$desc" | grep -qi "GoXLRMini Broadcast Stream Mix"; then
             echo "$name"
             break
         fi
     done)
 
-    Sink=$(pactl list short sinks | grep -i "rog\|fusion" | awk '{print $2}')
+    Sink=$(pactl list short sinks | grep -i "rog\|fusion\|razer" | awk '{print $2}')
 
     if [[ -n "$Source" && -n "$Sink" ]]; then
         echo "Found both Source and Sink"
