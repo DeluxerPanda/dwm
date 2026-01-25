@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# filepath: c:\Users\Pandora\Documents\GitHub\dwm\Artch-install.sh
+
 # Redirect stdout and stderr to archsetup.txt and still output to console
 exec > >(tee -i archsetup.txt)
 exec 2>&1
@@ -27,24 +29,24 @@ fi
 root_check() {
     if [[ "$(id -u)" != "0" ]]; then
         echo -ne "ERROR! This script must be run under the 'root' user!\n"
-        exit 0
+        exit 1
     fi
 }
 
 docker_check() {
     if awk -F/ '$2 == "docker"' /proc/self/cgroup | read -r; then
         echo -ne "ERROR! Docker container is not supported (at the moment)\n"
-        exit 0
+        exit 1
     elif [[ -f /.dockerenv ]]; then
         echo -ne "ERROR! Docker container is not supported (at the moment)\n"
-        exit 0
+        exit 1
     fi
 }
 
 arch_check() {
     if [[ ! -e /etc/arch-release ]]; then
         echo -ne "ERROR! This script must be run in Arch Linux!\n"
-        exit 0
+        exit 1
     fi
 }
 
@@ -52,7 +54,7 @@ pacman_check() {
     if [[ -f /var/lib/pacman/db.lck ]]; then
         echo "ERROR! Pacman is blocked."
         echo -ne "If not running remove /var/lib/pacman/db.lck.\n"
-        exit 0
+        exit 1
     fi
 }
 
@@ -159,12 +161,11 @@ grub_flags () {
 
     case $? in
         0)
-        export BOOTLOADER_FLAGS="--removable"
+        export BOOTLOADER_FLAGS="--removable";;
         1)
-        export BOOTLOADER_FLAGS=""
-        *) echo "Wrong option. Try again";grub_flags;;
+        export BOOTLOADER_FLAGS="";;
+        *) echo "Wrong option. Try again"; grub_flags;;
     esac
-}
 }
 
 # @description Choose whether drive is SSD or not.
@@ -183,7 +184,7 @@ drivessd () {
         export MOUNT_OPTIONS="noatime,compress=zstd:5,ssd,commit=120";;
         2)
         export MOUNT_OPTIONS="noatime,compress=zstd,commit=120";;
-        *) echo "Wrong option. Try again";drivessd;;
+        *) echo "Wrong option. Try again"; drivessd;;
     esac
 }
 
@@ -201,8 +202,8 @@ echo -ne "
 "
 
     #Loop through selection if non-viable device (mmcblkXbootY, mmcblkXrpbm, etc) is selected
-	   while true
-	   do
+       while true
+       do
        PS3='
        Select the disk to install on: '
        mapfile -t options < <(lsblk -n --output TYPE,KNAME,SIZE | awk '$1=="disk"{print "/dev/"$2"|"$3}')
@@ -210,10 +211,10 @@ echo -ne "
        select_option "${options[@]}"
        disk=${options[$?]%|*}
        if [[ ! "${disk%|*}" =~  ^/dev/mmcblk[0-9]+[a-z]+[0-9]? ]]
-    	  then
-    		    break
-    	  fi
-    	  echo -e "\n${disk%|*} is not a viable install drive \n"
+          then
+                break
+          fi
+          echo -e "\n${disk%|*} is not a viable install drive \n"
     done
 
     echo -e "\n${disk%|*} selected \n"
@@ -546,8 +547,6 @@ elif echo "${gpu_type}" | grep -E "Intel Corporation UHD"; then
     echo "Installing Intel UHD drivers:"
     pacman -S --noconfirm --needed libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa
 fi
-
-echo -ne "
 
 echo -ne "
 -------------------------------------------------------------------------
