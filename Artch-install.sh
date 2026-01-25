@@ -134,25 +134,9 @@ echo -ne "
 ------------------------------------------------------------------------
 "
 }
-# @description This function will handle file systems. At this movement we are handling only
-# btrfs and ext4. Others will be added in future.
+# @description This function will handle file systems. At this movement we are handling only btrfs.
 filesystem () {
-    echo -ne "
-    Please Select your file system for both boot and root
-    "
-    options=("btrfs" "ext4" "luks" "exit")
-    select_option "${options[@]}"
-
-    case $? in
-    0) export FS=btrfs;;
-    1) export FS=ext4;;
-    2)
-        set_password "LUKS_PASSWORD"
-        export FS=luks
-        ;;
-    3) exit ;;
-    *) echo "Wrong option please select again"; filesystem;;
-    esac
+    export FS=btrfs;;
 }
 
 # @description Detects and sets timezone.
@@ -162,6 +146,25 @@ timezone () {
 # @description Set user's keyboard mapping.
 keymap () {
     export KEYMAP="sv-latin1"
+}
+
+grub_flags () {
+    echo -ne "
+    Do you want to install GRUB with the --removable flag?
+    This is recommended for UEFI systems to ensure GRUB boots on most firmwares.
+    "
+
+    options=("Yes" "No")
+    select_option "${options[@]}"
+
+    case $? in
+        0)
+        export BOOTLOADER_FLAGS="--removable";;
+        1)
+        export BOOTLOADER_FLAGS="";;
+        *) echo "Wrong option. Try again";grub_flags;;
+    esac
+}
 }
 
 # @description Choose whether drive is SSD or not.
@@ -280,12 +283,13 @@ filesystem
 clear
 logo
 timezone
+grub_flags
 clear
 logo
 keymap
 
 echo "Setting up mirrors for optimal download"
-iso=$(curl -4 ifconfig.io/country_code)
+iso="SE"
 timedatectl set-ntp true
 pacman -Sy
 pacman -S --noconfirm archlinux-keyring #update keyrings to latest to prevent packages failing to install
@@ -376,22 +380,6 @@ if [[ "${FS}" == "btrfs" ]]; then
     mkfs.btrfs -f "${partition3}"
     mount -t btrfs "${partition3}" /mnt
     subvolumesetup
-elif [[ "${FS}" == "ext4" ]]; then
-    mkfs.fat -F32 -n "EFIBOOT" "${partition2}"
-    mkfs.ext4 "${partition3}"
-    mount -t ext4 "${partition3}" /mnt
-elif [[ "${FS}" == "luks" ]]; then
-    mkfs.fat -F32 "${partition2}"
-# enter luks password to cryptsetup and format root partition
-    echo -n "${LUKS_PASSWORD}" | cryptsetup -y -v luksFormat "${partition3}" -
-# open luks container and ROOT will be place holder
-    echo -n "${LUKS_PASSWORD}" | cryptsetup open "${partition3}" ROOT -
-# now format that container
-    mkfs.btrfs "${partition3}"
-# create subvolumes for btrfs
-    mount -t btrfs "${partition3}" /mnt
-    subvolumesetup
-    ENCRYPTED_PARTITION_UUID=$(blkid -s UUID -o value "${partition3}")
 fi
 
 BOOT_UUID=$(blkid -s UUID -o value "${partition2}")
@@ -436,7 +424,7 @@ echo -ne "
 -------------------------------------------------------------------------
 "
 if [[ ! -d "/sys/firmware/efi" ]]; then
-    grub-install --boot-directory=/mnt/boot "${DISK}"
+    grub-install --boot-directory=/mnt/boot "${DISK}" ${BOOTLOADER_FLAGS}
 fi
 echo -ne "
 -------------------------------------------------------------------------
@@ -560,6 +548,8 @@ elif echo "${gpu_type}" | grep -E "Intel Corporation UHD"; then
 fi
 
 echo -ne "
+
+echo -ne "
 -------------------------------------------------------------------------
                     Adding User
 -------------------------------------------------------------------------
@@ -570,14 +560,6 @@ echo "$USERNAME created, home directory created, added to wheel and libvirt grou
 echo "$USERNAME:$PASSWORD" | chpasswd
 echo "$USERNAME password set"
 echo $NAME_OF_MACHINE > /etc/hostname
-
-if [[ ${FS} == "luks" ]]; then
-# Making sure to edit mkinitcpio conf if luks is selected
-# add encrypt in mkinitcpio.conf before filesystems in hooks
-    sed -i 's/filesystems/encrypt filesystems/g' /etc/mkinitcpio.conf
-# making mkinitcpio with linux kernel
-    mkinitcpio -p linux-lts
-fi
 
 echo -ne "
 -------------------------------------------------------------------------
@@ -596,7 +578,7 @@ GRUB EFI Bootloader Install & Check
 "
 
 if [[ -d "/sys/firmware/efi" ]]; then
-    grub-install --efi-directory=/boot ${DISK}
+    grub-install --efi-directory=/boot ${DISK} ${BOOTLOADER_FLAGS}
 fi
 
 echo -ne "
@@ -604,10 +586,7 @@ echo -ne "
                Creating Grub Boot Menu
 -------------------------------------------------------------------------
 "
-# set kernel parameter for decrypting the drive
-if [[ "${FS}" == "luks" ]]; then
-sed -i "s%GRUB_CMDLINE_LINUX_DEFAULT=\"%GRUB_CMDLINE_LINUX_DEFAULT=\"cryptdevice=UUID=${ENCRYPTED_PARTITION_UUID}:ROOT root=/dev/mapper/ROOT %g" /etc/default/grub
-fi
+
 # set kernel parameter for adding splash screen
 sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& splash /' /etc/default/grub
 
