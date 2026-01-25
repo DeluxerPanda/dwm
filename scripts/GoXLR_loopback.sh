@@ -43,5 +43,11 @@ if [[ -z "$Source" || -z "$Sink" ]]; then
     exit 1
 fi
 
+# Remove existing loopback modules
+pactl list-modules | grep module-loopback | awk '{print $1}' | while read -r module_id; do
+    pactl unload-module "$module_id"
+    echo "Removed existing loopback module: $module_id"
+done
+
 # Load loopback module
 pactl load-module module-loopback source="$Source" sink="$Sink"
