@@ -20,8 +20,8 @@ for i in {1..30}; do
     Source=$(pactl list short sources | while read -r line; do
         name=$(echo "$line" | awk '{print $2}')
         index=$(echo "$line" | awk '{print $1}')
-        desc=$(pactl list sources | awk -v idx="Source #$index" -v RS="" '$0 ~ idx {print}' | grep -i "GoXLRMini Broadcast Stream Mix" | cut -d: -f2-)
-        if echo "$desc" | grep -qi "GoXLRMini Broadcast Stream Mix"; then
+        desc=$(pactl list sources | awk -v idx="Source #$index" -v RS="" '$0 ~ idx {print}' | grep -i "Description" | cut -d: -f2-)
+        if echo "$desc" | grep -qiE "GoXLRMini Broadcast Stream Mix|Stream Mix"; then
             echo "$name"
             break
         fi
@@ -44,7 +44,7 @@ if [[ -z "$Source" || -z "$Sink" ]]; then
 fi
 
 # Remove existing loopback modules
-pactl list-modules | grep module-loopback | awk '{print $1}' | while read -r module_id; do
+pactl list short modules | grep -i loopback | awk '{print $1}' | while read -r module_id; do
     pactl unload-module "$module_id"
     echo "Removed existing loopback module: $module_id"
 done
