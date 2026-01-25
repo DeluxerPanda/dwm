@@ -410,9 +410,9 @@ echo -ne "
 -------------------------------------------------------------------------
 "
 if [[ ! -d "/sys/firmware/efi" ]]; then
-    pacstrap /mnt base base-devel linux-lts linux-firmware --noconfirm --needed
+    pacstrap /mnt base base-devel linux linux-firmware --noconfirm --needed
 else
-    pacstrap /mnt base base-devel linux-lts linux-firmware efibootmgr --noconfirm --needed
+    pacstrap /mnt base base-devel linux linux-firmware efibootmgr --noconfirm --needed
 fi
 echo "keyserver hkp://keyserver.ubuntu.com" >> /mnt/etc/pacman.d/gnupg/gpg.conf
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
@@ -538,16 +538,13 @@ echo -ne "
 "
 # Graphics Drivers find and install
 if echo "${gpu_type}" | grep -E "NVIDIA|GeForce"; then
-    echo "Installing NVIDIA drivers: nvidia-lts"
-    pacman -S --noconfirm --needed nvidia-lts
+    echo "Installing NVIDIA drivers: nvidia-open nvidia-settings nvidia-utils"
+    pacman -S --noconfirm --needed nvidia-open nvidia-settings nvidia-utils
 elif echo "${gpu_type}" | grep 'VGA' | grep -E "Radeon|AMD"; then
     echo "Installing AMD drivers: xf86-video-amdgpu"
     pacman -S --noconfirm --needed xf86-video-amdgpu
 elif echo "${gpu_type}" | grep -E "Integrated Graphics Controller"; then
     echo "Installing Intel drivers:"
-    pacman -S --noconfirm --needed libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa
-elif echo "${gpu_type}" | grep -E "Intel Corporation UHD"; then
-    echo "Installing Intel UHD drivers:"
     pacman -S --noconfirm --needed libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa
 fi
 
