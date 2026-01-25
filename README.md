@@ -5,22 +5,4 @@ Jag tar inget ansvar för eventuella skador eller dataförluster.
 
 > **Viktigt:** Se till att du förstår konsekvenserna innan du fortsätter.
 
-#
-
-# Installera
-# klona repot
-```
-git clone https://github.com/DeluxerPanda/dwm.git
-```
-# Gå till det klonade repot
-```
-cd dwm
-```
-# Gör installationsskriptet körbart
-```
-chmod +x setup_for_Arch_base.sh
-```
-# Kör installationsskriptet
-```
-./setup_for_Arch_base.sh
 ```
