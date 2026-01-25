@@ -136,7 +136,7 @@ echo -ne "
 }
 # @description This function will handle file systems. At this movement we are handling only btrfs.
 filesystem () {
-    export FS=btrfs;;
+    export FS=btrfs
 }
 
 # @description Detects and sets timezone.
@@ -159,9 +159,9 @@ grub_flags () {
 
     case $? in
         0)
-        export BOOTLOADER_FLAGS="--removable";;
+        export BOOTLOADER_FLAGS="--removable"
         1)
-        export BOOTLOADER_FLAGS="";;
+        export BOOTLOADER_FLAGS=""
         *) echo "Wrong option. Try again";grub_flags;;
     esac
 }
