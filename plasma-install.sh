@@ -2,8 +2,9 @@
 export work_dir="$(pwd)"
 sudo pacman -Sy --noconfirm
 sudo pacman -Syu --noconfirm
-sudo pacman -S --needed --noconfirm kdeconnect starship bash-completion bat fastfetch btop pavucontrol mpv firefox feh flameshot wget plasma-desktop konsole kate dolphin ark plasma-workspace nfs-utils nano usbutils gnome-keyring fuse ffmpeg
+sudo pacman -S --needed --noconfirm kdeconnect starship bash-completion bat fastfetch btop pavucontrol mpv firefox feh flameshot wget plasma konsole kate dolphin ark nfs-utils nano usbutils gnome-keyring fuse ffmpeg flatpak
 sudo systemctl enable --now NetworkManager
+sudo systemctl enable --now sddm
 
     # Install YAY
     git clone https://aur.archlinux.org/yay-bin.git
@@ -30,3 +31,5 @@ echo -ne "
               Installation of Plasma Desktop Environment Complete
 -------------------------------------------------------------------------
 "
+
+sudo reboot now
