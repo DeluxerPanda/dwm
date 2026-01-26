@@ -1,11 +1,9 @@
 #!/bin/bash
 
-# filepath: c:\Users\Pandora\Documents\GitHub\dwm\Artch-install.sh
-
 # Redirect stdout and stderr to archsetup.txt and still output to console
 exec > >(tee -i archsetup.txt)
 exec 2>&1
-
+export GIT_DIR="$(pwd)"
 echo -ne "
 -------------------------------------------------------------------------
                                                               
@@ -148,10 +146,10 @@ filesystem () {
 # @description Detects and sets timezone.
 timezone () {
     export TIMEZONE="Europe/Stockholm"
-}
+    }
 # @description Set user's keyboard mapping.
 keymap () {
-    export KEYMAP="sv-latin1"
+    export KEYMAP="sv"
 }
 
     MSI_motherboard () {
@@ -410,9 +408,9 @@ echo -ne "
 -------------------------------------------------------------------------
 "
 if [[ ! -d "/sys/firmware/efi" ]]; then
-    pacstrap /mnt base base-devel linux linux-firmware --noconfirm --needed
+    pacstrap /mnt base base-devel linux linux-headers linux-firmware --noconfirm --needed
 else
-    pacstrap /mnt base base-devel linux linux-firmware efibootmgr --noconfirm --needed
+    pacstrap /mnt base base-devel linux linux-headers linux-firmware efibootmgr --noconfirm --needed
 fi
 echo "keyserver hkp://keyserver.ubuntu.com" >> /mnt/etc/pacman.d/gnupg/gpg.conf
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
@@ -538,8 +536,8 @@ echo -ne "
 "
 # Graphics Drivers find and install
 if echo "${gpu_type}" | grep -E "NVIDIA|GeForce"; then
-    echo "Installing NVIDIA drivers: nvidia-open nvidia-settings nvidia-utils"
-    pacman -S --noconfirm --needed nvidia-open nvidia-settings nvidia-utils
+    echo "Installing NVIDIA drivers: nvidia-open nvidia-open-dkms nvidia-settings nvidia-utils"
+    pacman -S --noconfirm --needed nvidia-open nvidia-open-dkms nvidia-settings nvidia-utils
 elif echo "${gpu_type}" | grep 'VGA' | grep -E "Radeon|AMD"; then
     echo "Installing AMD drivers: xf86-video-amdgpu"
     pacman -S --noconfirm --needed xf86-video-amdgpu
@@ -598,9 +596,25 @@ if echo "${gpu_type}" | grep -E "NVIDIA|GeForce"; then
     sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& nvidia-drm.modeset=1/' /etc/default/grub
 fi
 
+
+
+
+# Copy theme
+    echo -e "Installing theme..."
+
+    mkdir -p "/boot/grub/themes/CartoonGirl"
+
+    cp -a ${GIT_DIR}/config/CartoonGirl/* "/boot/grub/themes/CartoonGirl"
+
+    sed -i '/^GRUB_TIMEOUT=/c\GRUB_TIMEOUT=60' /etc/default/grub
+
+    sed -i 's|^#GRUB_THEME=.*|GRUB_THEME="/boot/grub/themes/CartoonGirl/theme.txt"|' /etc/default/grub
+
 echo -e "Updating grub..."
-grub-mkconfig -o /boot/grub/grub.cfg
-echo -e "All set!"
+
+    grub-mkconfig -o /boot/grub/grub.cfg
+
+    echo -e "All set!"
 
 if [[ "$MSIBORD" == "yes" ]]; then
     mkdir -p /boot/EFI/Microsoft/Boot/
@@ -621,40 +635,22 @@ systemctl enable NetworkManager.service
 echo "  NetworkManager enabled"
 systemctl enable reflector.timer
 echo "  Reflector enabled"
+systemctl enable sddm.service
+echo "  Sddm enabled"
 
 echo -ne "
 -------------------------------------------------------------------------
                     Dekstop Environment Setup and Essentials packages
 -------------------------------------------------------------------------
 "
-export work_dir="$(pwd)"
-sudo systemctl enable --now NetworkManager
-sudo pacman -Sy --noconfirm
-sudo pacman -Syu --noconfirm
-sudo pacman -S --needed --noconfirm kdeconnect starship bash-completion bat fastfetch btop pavucontrol mpv firefox feh flameshot wget plasma konsole kate dolphin ark nfs-utils nano usbutils gnome-keyring fuse ffmpeg flatpak steam
-sudo systemctl enable sddm
+pacman -Sy --noconfirm
+pacman -S --needed --noconfirm kdeconnect starship bash-completion bat fastfetch btop pavucontrol mpv firefox feh flameshot plasma konsole kate dolphin ark nfs-utils nano usbutils gnome-keyring fuse ffmpeg flatpak steam
 
-    # Install YAY
-    git clone https://aur.archlinux.org/yay-bin.git
-    cd yay-bin
-    makepkg --noconfirm -si
-    cd "$work_dir"
-    rm -rf yay-bin
+sudo wget -P /home/$USERNAME/Desktop/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/SetupConfigs.sh
 
-    # Optional GoXLR support
-    if lsusb | grep -q "GoXLRMini"; then
-        yay -S --needed --noconfirm goxlr-utility
-    fi
+sudo chown "$USERNAME:$USERNAME" /home/$USERNAME/Desktop/SetupConfigs.sh
+chmod +x /home/$USERNAME/Desktop/SetupConfigs.sh
 
-        # Config files
-    mkdir -p ~/.config
-    cp "$work_dir/config/starship.toml" ~/.config/
-    mkdir -p ~/.config/fastfetch && cp -r "$work_dir/config/fastfetch/" ~/.config/
-
-    # Shell configs
-    cp "$work_dir/config/.bashrc" ~/.bashrc
-    
-    cd "$work_dir"
 
 echo -ne "
 -------------------------------------------------------------------------
