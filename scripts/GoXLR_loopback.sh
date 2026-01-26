@@ -11,7 +11,7 @@ done
 
 # If it's still not detected, exit
 if ! lsusb | grep -q "GoXLRMini"; then
-    echo "GoXLR Mini not detected after waiting"
+    echo "GoXLR Mini not detected"
     exit 1
 fi
 
@@ -51,3 +51,5 @@ done
 
 # Load loopback module
 pactl load-module module-loopback source="$Source" sink="$Sink"
+
+echo "done."
