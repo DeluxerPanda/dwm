@@ -59,6 +59,11 @@ select_option() {
 SetupConfig() {
 clear
     export work_dir="$(pwd)"
+    git clone https://aur.archlinux.org/yay-bin.git
+    cd yay-bin
+    makepkg --noconfirm -si
+    cd ..
+    rm -rf yay-bin
 
     if lsusb | grep -q "GoXLRMini"; then
         yay -S  --sudoloop --needed --noconfirm goxlr-utility
