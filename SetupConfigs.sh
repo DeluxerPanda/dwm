@@ -59,11 +59,6 @@ select_option() {
 SetupConfig() {
 clear
     export work_dir="$(pwd)"
-    git clone https://aur.archlinux.org/yay-bin.git
-    cd yay-bin
-    makepkg --noconfirm -si
-    cd ..
-    rm -rf yay-bin
 
     if lsusb | grep -q "GoXLRMini"; then
         yay -S  --sudoloop --needed --noconfirm goxlr-utility
@@ -72,7 +67,7 @@ mkdir -p ~/.config/autostart
 
 tee ~/.config/autostart/GoXLR_loopback.desktop > /dev/null <<'EOF'
 [Desktop Entry]
-Exec=~/Downloads/GoXLR_loopback.sh
+Exec=~/scripts/GoXLR_loopback.sh
 Icon=application-x-shellscript
 Name=GoXLR_loopback.sh
 Type=Application

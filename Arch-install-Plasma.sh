@@ -646,6 +646,12 @@ echo -ne "
 pacman -Sy --noconfirm
 pacman -S --needed --noconfirm kdeconnect starship bash-completion bat fastfetch btop pavucontrol mpv firefox feh flameshot plasma konsole kate dolphin ark nfs-utils nano usbutils gnome-keyring fuse ffmpeg flatpak steam
 
+    git clone https://aur.archlinux.org/yay-bin.git
+    cd yay-bin
+    makepkg --noconfirm -si
+    cd ..
+    rm -rf yay-bin
+
 sudo wget -P /home/$USERNAME/Desktop/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/SetupConfigs.sh
 
 sudo chown "$USERNAME:$USERNAME" /home/$USERNAME/Desktop/SetupConfigs.sh
