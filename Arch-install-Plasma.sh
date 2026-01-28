@@ -522,12 +522,12 @@ echo -ne "
 if echo "${gpu_type}" | grep -E "NVIDIA|GeForce"; then
     echo "Installing NVIDIA drivers: nvidia-open nvidia-open-dkms nvidia-settings nvidia-utils"
     pacman -S --noconfirm --needed nvidia-open nvidia-open-dkms nvidia-settings nvidia-utils
-    wget -P /etc/modprobe.d/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/modprobe/nvidia.conf
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/modprobe/nvidia.conf -O /etc/modprobe.d/nvidia.conf
     sed -i 's/^MODULES=(/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm /' /etc/mkinitcpio.conf
 elif echo "${gpu_type}" | grep 'VGA' | grep -E "Radeon"; then
     echo "Installing AMD drivers: xf86-video-amdgpu"
     pacman -S --noconfirm --needed xf86-video-amdgpu
-    wget -P /etc/X11/xorg.conf.d/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/X11/20-amdgpu.conf
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/X11/20-amdgpu.conf -O /etc/X11/xorg.conf.d/20-amdgpu.conf
 fi
 
 echo -ne "
@@ -584,25 +584,25 @@ sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="\(.*\)quiet\(.*\)"/GRUB_CMDLINE_LINUX_DEFA
 if [ "$GRUB_THEME" == "CartoonGirl" ]; then
     mkdir -p "/boot/grub/themes/CartoonGirl"
 
-    wget -p /boot/grub/themes/CartoonGirl/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/theme.txt
-    wget -p /boot/grub/themes/CartoonGirl/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/select_w.png
-    wget -p /boot/grub/themes/CartoonGirl/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/select_e.png
-    wget -p /boot/grub/themes/CartoonGirl/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/select_c.png
-    wget -p /boot/grub/themes/CartoonGirl/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/norwester_22.pf2
-    wget -p /boot/grub/themes/CartoonGirl/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/hackb_18.pf2
-    wget -p /boot/grub/themes/CartoonGirl/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/Cartoon%20Girl.png
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/theme.txt -O /boot/grub/themes/CartoonGirl/theme.txt
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/select_w.png -O /boot/grub/themes/CartoonGirl/select_w.png
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/select_e.png -O /boot/grub/themes/CartoonGirl/select_e.png
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/select_c.png -O /boot/grub/themes/CartoonGirl/select_c.png
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/norwester_22.pf2 -O /boot/grub/themes/CartoonGirl/norwester_22.pf2
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/hackb_18.pf2 -O /boot/grub/themes/CartoonGirl/hackb_18.pf2
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/Cartoon%20Girl.png -O /boot/grub/themes/CartoonGirl/Cartoon%20Girl.png
     
     sed -i 's|^#GRUB_THEME=.*|GRUB_THEME="/boot/grub/themes/CartoonGirl/theme.txt"|' /etc/default/grub
 
 elif [ "$GRUB_THEME" == "Aesthetic" ]; then
     mkdir -p "/boot/grub/themes/Aesthetic"
 
-    wget -p /boot/grub/themes/Aesthetic/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/Aesthetic/theme.txt
-    wget -p /boot/grub/themes/Aesthetic/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/Aesthetic/select_w.png
-    wget -p /boot/grub/themes/Aesthetic/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/Aesthetic/select_e.png
-    wget -p /boot/grub/themes/Aesthetic/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/Aesthetic/select_c.png
-    wget -p /boot/grub/themes/Aesthetic/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/Aesthetic/hackb_18.pf2
-    wget -p /boot/grub/themes/Aesthetic/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/Aesthetic/Aesthetic.png
+    wget -p https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/Aesthetic/theme.txt -O /boot/grub/themes/Aesthetic/theme.txt
+    wget -p https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/Aesthetic/select_w.png -O /boot/grub/themes/Aesthetic/select_w.png
+    wget -p https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/Aesthetic/select_e.png -O /boot/grub/themes/Aesthetic/select_e.png
+    wget -p https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/Aesthetic/select_c.png -O /boot/grub/themes/Aesthetic/select_c.png
+    wget -p https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/Aesthetic/hackb_18.pf2 -O /boot/grub/themes/Aesthetic/hackb_18.pf2
+    wget -p https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/Aesthetic/Aesthetic.png -O /boot/grub/themes/Aesthetic/Aesthetic.png
     
     sed -i 's|^#GRUB_THEME=.*|GRUB_THEME="/boot/grub/themes/Aesthetic/theme.txt"|' /etc/default/grub
 fi
@@ -630,23 +630,30 @@ echo -ne "
 pacman -Sy --noconfirm
 pacman -S --needed --noconfirm kdeconnect starship bash-completion bat fastfetch btop pavucontrol mpv firefox feh flameshot plasma sddm konsole kate dolphin ark nfs-utils nano usbutils gnome-keyring fuse ffmpeg flatpak steam
 
-wget -P /home/$USERNAME/Desktop/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/SetupConfigs.sh
+wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/SetupConfigs.sh -O /home/$USERNAME/Desktop/SetupConfigs.sh
 
 chown "$USERNAME:$USERNAME" /home/$USERNAME/Desktop/SetupConfigs.sh
 chmod +x /home/$USERNAME/Desktop/SetupConfigs.sh
 
+printf "\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist" | tee -a /etc/pacman.conf
+pacman-key --noconfirm --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
+pacman-key --noconfirm --lsign-key 3056513887B78AEB
+pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
+pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+pacman -Syu --noconfirm
+
     if lsusb | grep -q "GoXLRMini"; then
-       # yay -S  --sudoloop --needed --noconfirm goxlr-utility
+        pacman -S --needed --noconfirm goxlr-utility
 
 mkdir -p /home/$USERNAME/.config/autostart
 
-wget -P  /home/$USERNAME/.config/autostart/GoXLR_loopback.desktop https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/autostart/GoXLR_loopback.desktop
+wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/autostart/GoXLR_loopback.desktop -O /home/$USERNAME/.config/autostart/GoXLR_loopback.desktop
 
-sudo chmod 600 /home/$USERNAME/.config/autostart/GoXLR_loopback.desktop
+chmod 600 /home/$USERNAME/.config/autostart/GoXLR_loopback.desktop
 
-wget -P  /home/$USERNAME/.config/autostart/GoXLR_daemon.desktop https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/autostart/GoXLR_daemon.desktop
+wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/autostart/GoXLR_daemon.desktop -O /home/$USERNAME/.config/autostart/GoXLR_daemon.desktop
 
-sudo chmod 600 /home/$USERNAME/.config/autostart/GoXLR_daemon.desktop
+chmod 600 /home/$USERNAME/.config/autostart/GoXLR_daemon.desktop
 chown -R "$USERNAME:$USERNAME" /home/$USERNAME/.config/autostart/
     fi
 
