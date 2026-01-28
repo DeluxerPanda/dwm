@@ -622,6 +622,22 @@ echo -e "Updating grub..."
 
     echo -e "All set!"
 
+
+echo -ne "
+-------------------------------------------------------------------------
+                    Enabling Essential Services
+-------------------------------------------------------------------------
+"
+ntpd -qg
+systemctl enable ntpd.service
+echo "  NTP enabled"
+systemctl disable dhcpcd.service
+echo "  DHCP disabled"
+systemctl enable NetworkManager.service
+echo "  NetworkManager enabled"
+systemctl enable reflector.timer
+echo "  Reflector enabled"
+
 echo -ne "
 -------------------------------------------------------------------------
                     Dekstop Environment Setup and Essentials packages
@@ -629,7 +645,8 @@ echo -ne "
 "
 pacman -Sy --noconfirm
 pacman -S --needed --noconfirm kdeconnect starship bash-completion bat fastfetch btop pavucontrol mpv firefox feh flameshot plasma sddm konsole kate dolphin ark nfs-utils nano usbutils gnome-keyring fuse ffmpeg flatpak steam
-
+systemctl enable sddm.service
+echo "  Sddm enabled"
 wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/SetupConfigs.sh -O /home/$USERNAME/Desktop/SetupConfigs.sh
 
 chown "$USERNAME:$USERNAME" /home/$USERNAME/Desktop/SetupConfigs.sh
@@ -656,24 +673,6 @@ wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/aut
 chmod 600 /home/$USERNAME/.config/autostart/GoXLR_daemon.desktop
 chown -R "$USERNAME:$USERNAME" /home/$USERNAME/.config/autostart/
     fi
-
-
-echo -ne "
--------------------------------------------------------------------------
-                    Enabling Essential Services
--------------------------------------------------------------------------
-"
-ntpd -qg
-systemctl enable ntpd.service
-echo "  NTP enabled"
-systemctl disable dhcpcd.service
-echo "  DHCP disabled"
-systemctl enable NetworkManager.service
-echo "  NetworkManager enabled"
-systemctl enable reflector.timer
-echo "  Reflector enabled"
-systemctl enable sddm.service
-echo "  Sddm enabled"
 
 echo -ne "
 -------------------------------------------------------------------------
