@@ -3,7 +3,6 @@
 # Redirect stdout and stderr to archsetup.txt and still output to console
 exec > >(tee -i archsetup.txt)
 exec 2>&1
-export GIT_DIR="$(pwd)"
 export MSIBORD=$(cat /sys/class/dmi/id/board_vendor 2>/dev/null)
 echo -ne "
 -------------------------------------------------------------------------
@@ -143,18 +142,16 @@ echo -ne "
 # @description Choose whether drive is SSD or not.
 drivessd () {
     echo -ne "
-    Is this a solid state, flash, or hard drive?
+    Is this a solid state (SSD) or hard drive (HDD)?
     "
 
-    options=("SSD" "MMC" "HDD")
+    options=("SSD" "HDD")
     select_option "${options[@]}"
 
     case $? in
         0)
         export MOUNT_OPTIONS="noatime,compress=zstd,ssd,commit=120";;
         1)
-        export MOUNT_OPTIONS="noatime,compress=zstd:5,ssd,commit=120";;
-        2)
         export MOUNT_OPTIONS="noatime,compress=zstd,commit=120";;
         *) echo "Wrong option. Try again"; drivessd;;
     esac
@@ -241,6 +238,30 @@ userinfo () {
     done
     export NAME_OF_MACHINE=$name_of_machine
 }
+grubtheme () {
+    echo -ne "  
+    -----------------------------------------------------------------------
+                        Grub Theme Selection                    
+    -----------------------------------------------------------------------
+    Please select a grub theme to install:
+    1) Cartoon Girl
+    2) Aesthetic
+    3) none (default)
+    -----------------------------------------------------------------------
+    "
+    options=("Cartoon Girl" "Aesthetic" "none")
+    select_option "${options[@]}"
+    case $? in
+        0)
+        export GRUB_THEME="CartoonGirl";;
+        1)
+        export GRUB_THEME="Aesthetic";;
+        2)
+        export GRUB_THEME="none";;
+        *) echo "Wrong option. Try again"; grubtheme;;
+    esac                
+}
+
 
 # Starting functions
 background_checks
@@ -249,11 +270,10 @@ logo
 userinfo
 clear
 logo
+grubtheme
+clear
+logo
 diskpart
-clear
-logo
-clear
-logo
 clear
 logo
 
@@ -566,13 +586,33 @@ fi
 # Copy theme
     echo -e "Installing theme..."
 
+if [ "$GRUB_THEME" == "CartoonGirl" ]; then
     mkdir -p "/boot/grub/themes/CartoonGirl"
 
-    cp -a $GIT_DIR/config/CartoonGirl/* "/boot/grub/themes/CartoonGirl"
-
-    sed -i '/^GRUB_TIMEOUT=/c\GRUB_TIMEOUT=60' /etc/default/grub
-
+    wget -p /boot/grub/themes/CartoonGirl/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/theme.txt
+    wget -p /boot/grub/themes/CartoonGirl/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/select_w.png
+    wget -p /boot/grub/themes/CartoonGirl/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/select_e.png
+    wget -p /boot/grub/themes/CartoonGirl/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/select_c.png
+    wget -p /boot/grub/themes/CartoonGirl/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/norwester_22.pf2
+    wget -p /boot/grub/themes/CartoonGirl/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/hackb_18.pf2
+    wget -p /boot/grub/themes/CartoonGirl/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/Cartoon%20Girl.png
+    
     sed -i 's|^#GRUB_THEME=.*|GRUB_THEME="/boot/grub/themes/CartoonGirl/theme.txt"|' /etc/default/grub
+
+elseif [ "$GRUB_THEME" == "Aesthetic" ]; then
+    mkdir -p "/boot/grub/themes/Aesthetic"
+
+    wget -p /boot/grub/themes/Aesthetic/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/Aesthetic/theme.txt
+    wget -p /boot/grub/themes/Aesthetic/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/Aesthetic/select_w.png
+    wget -p /boot/grub/themes/Aesthetic/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/Aesthetic/select_e.png
+    wget -p /boot/grub/themes/Aesthetic/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/Aesthetic/select_c.png
+    wget -p /boot/grub/themes/Aesthetic/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/Aesthetic/hackb_18.pf2
+    wget -p /boot/grub/themes/Aesthetic/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/Aesthetic/Aesthetic.png
+    
+    sed -i 's|^#GRUB_THEME=.*|GRUB_THEME="/boot/grub/themes/Aesthetic/theme.txt"|' /etc/default/grub
+fi
+
+    sed -i '/^GRUB_TIMEOUT=/c\GRUB_TIMEOUT=50' /etc/default/grub
 
 echo -e "Updating grub..."
 

@@ -1,6 +1,28 @@
-# ⚠️ **VARNING!**  
+# ⚠️ **VARNING**
 
-<span style="color:red;">Dom här scripten körs på egen risk!</span>  
-Jag tar inget ansvar för eventuella skador eller dataförluster.  
+<span style="color:red;"><strong>Dessa script körs helt på egen risk!</strong></span>  
+Jag tar inget ansvar för eventuella skador, instabilitet eller dataförlust som kan uppstå.
 
-> **Viktigt:** Se till att du förstår konsekvenserna innan du fortsätter.
+> **Viktigt:** Använd endast dessa script om du vet vad du gör
+
+---
+
+## 🎨 **GRUB Themes**
+
+### Aesthetic  -- [Source](https://store.kde.org/p/2142488)
+
+<img src="https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/Aesthetic.png">
+
+### Cartoon Girl -- [Source](https://store.kde.org/p/2142488)
+
+<img src="https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/Cartoon%20Girl.png">
+
+---
+
+## 🚀 **Fastfetch**
+
+### Non-binary
+<img src="">
+
+### Transgender  
+<img src="">
