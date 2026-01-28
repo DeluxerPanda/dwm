@@ -64,32 +64,6 @@ clear
     makepkg --noconfirm -si
     cd ..
     rm -rf yay-bin
-
-    if lsusb | grep -q "GoXLRMini"; then
-        yay -S  --sudoloop --needed --noconfirm goxlr-utility
-
-mkdir -p ~/.config/autostart
-
-tee ~/.config/autostart/GoXLR_loopback.desktop > /dev/null <<'EOF'
-[Desktop Entry]
-Exec=~/scripts/GoXLR_loopback.sh
-Icon=application-x-shellscript
-Name=GoXLR_loopback.sh
-Type=Application
-X-KDE-AutostartScript=true
-EOF
-sudo chmod 600 ~/.config/autostart/GoXLR_loopback.desktop
-
-tee ~/.config/autostart/GoXLR_daemon.desktop > /dev/null <<'EOF'
-[Desktop Entry]
-Exec=goxlr-daemon
-Icon=application-x-shellscript
-Name=goxlr-daemon
-Type=Application
-X-KDE-AutostartScript=true
-EOF
-sudo chmod 600 ~/.config/autostart/GoXLR_daemon.desktop
-    fi
 }
 
 dualGPU(){
@@ -115,15 +89,7 @@ clear
 
 
         if [[ "$AMD_main_GPU" == "yes" ]]; then
-        sudo mkdir -p /etc/X11/xorg.conf.d
 
-sudo tee /etc/X11/xorg.conf.d/20-amdgpu.conf > /dev/null <<'EOF'
-Section "Device"
-	Identifier "AMD"
-	Driver "amdgpu"
-	Option "TearFree" "true"
-EndSection
-EOF
         fi
 
         sudo pacman -S --needed --noconfirm go

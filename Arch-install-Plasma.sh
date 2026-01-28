@@ -522,12 +522,12 @@ echo -ne "
 if echo "${gpu_type}" | grep -E "NVIDIA|GeForce"; then
     echo "Installing NVIDIA drivers: nvidia-open nvidia-open-dkms nvidia-settings nvidia-utils"
     pacman -S --noconfirm --needed nvidia-open nvidia-open-dkms nvidia-settings nvidia-utils
-elif echo "${gpu_type}" | grep 'VGA' | grep -E "Radeon|AMD"; then
+    wget -P /etc/modprobe.d/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/modprobe/nvidia.conf
+    sed -i 's/^MODULES=(/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm /' /etc/mkinitcpio.conf
+elif echo "${gpu_type}" | grep 'VGA' | grep -E "Radeon"; then
     echo "Installing AMD drivers: xf86-video-amdgpu"
     pacman -S --noconfirm --needed xf86-video-amdgpu
-elif echo "${gpu_type}" | grep -E "Integrated Graphics Controller"; then
-    echo "Installing Intel drivers:"
-    pacman -S --noconfirm --needed libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa
+    wget -P /etc/X11/xorg.conf.d/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/X11/20-amdgpu.conf
 fi
 
 echo -ne "
@@ -575,11 +575,6 @@ sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& splash /' /etc/default/grub
 # remove quiet from grub cmdline
 sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="\(.*\)quiet\(.*\)"/GRUB_CMDLINE_LINUX_DEFAULT="\1\2"/' /etc/default/grub
 
-# add nvidia specific kernel parameters if nvidia gpu is detected
-if echo "${gpu_type}" | grep -E "NVIDIA|GeForce"; then
-    sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& nvidia-drm.modeset=1/' /etc/default/grub
-fi
-
 
 
 
@@ -599,7 +594,7 @@ if [ "$GRUB_THEME" == "CartoonGirl" ]; then
     
     sed -i 's|^#GRUB_THEME=.*|GRUB_THEME="/boot/grub/themes/CartoonGirl/theme.txt"|' /etc/default/grub
 
-elseif [ "$GRUB_THEME" == "Aesthetic" ]; then
+elif [ "$GRUB_THEME" == "Aesthetic" ]; then
     mkdir -p "/boot/grub/themes/Aesthetic"
 
     wget -p /boot/grub/themes/Aesthetic/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/Aesthetic/theme.txt
@@ -614,16 +609,18 @@ fi
 
     sed -i '/^GRUB_TIMEOUT=/c\GRUB_TIMEOUT=50' /etc/default/grub
 
-echo -e "Updating grub..."
-
-    grub-mkconfig -o /boot/grub/grub.cfg
-
-    echo -e "All set!"
-
 if [[ "$MSIBORD" == *"MSI"* || "$MSIBORD" == *"Micro-Star"* ]]; then
     mkdir -p /boot/EFI/Microsoft/Boot/
     cp /boot/EFI/BOOT/BOOTX64.EFI /boot/EFI/Microsoft/Boot/bootmgfw.efi
 fi
+
+echo -e "Updating grub..."
+
+    grub-mkconfig -o /boot/grub/grub.cfg
+
+    mkinitcpio -P
+
+    echo -e "All set!"
 
 echo -ne "
 -------------------------------------------------------------------------
@@ -637,6 +634,33 @@ wget -P /home/$USERNAME/Desktop/ https://raw.githubusercontent.com/DeluxerPanda/
 
 chown "$USERNAME:$USERNAME" /home/$USERNAME/Desktop/SetupConfigs.sh
 chmod +x /home/$USERNAME/Desktop/SetupConfigs.sh
+
+    if lsusb | grep -q "GoXLRMini"; then
+        yay -S  --sudoloop --needed --noconfirm goxlr-utility
+
+mkdir -p /home/$USERNAME/.config/autostart
+
+tee /home/$USERNAME/.config/autostart/GoXLR_loopback.desktop > /dev/null <<'EOF'
+[Desktop Entry]
+Exec=~/scripts/GoXLR_loopback.sh
+Icon=application-x-shellscript
+Name=GoXLR_loopback.sh
+Type=Application
+X-KDE-AutostartScript=true
+EOF
+sudo chmod 600 /home/$USERNAME/.config/autostart/GoXLR_loopback.desktop
+
+tee /home/$USERNAME/.config/autostart/GoXLR_daemon.desktop > /dev/null <<'EOF'
+[Desktop Entry]
+Exec=goxlr-daemon
+Icon=application-x-shellscript
+Name=goxlr-daemon
+Type=Application
+X-KDE-AutostartScript=true
+EOF
+sudo chmod 600 /home/$USERNAME/.config/autostart/GoXLR_daemon.desktop
+chown -R "$USERNAME:$USERNAME" /home/$USERNAME/.config/autostart/
+    fi
 
 
 echo -ne "
