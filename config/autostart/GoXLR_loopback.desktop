@@ -1,0 +1,6 @@
+[Desktop Entry]
+Exec=~/scripts/GoXLR_loopback.sh
+Icon=application-x-shellscript
+Name=GoXLR_loopback.sh
+Type=Application
+X-KDE-AutostartScript=true

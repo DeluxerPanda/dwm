@@ -636,28 +636,16 @@ chown "$USERNAME:$USERNAME" /home/$USERNAME/Desktop/SetupConfigs.sh
 chmod +x /home/$USERNAME/Desktop/SetupConfigs.sh
 
     if lsusb | grep -q "GoXLRMini"; then
-        yay -S  --sudoloop --needed --noconfirm goxlr-utility
+       # yay -S  --sudoloop --needed --noconfirm goxlr-utility
 
 mkdir -p /home/$USERNAME/.config/autostart
 
-tee /home/$USERNAME/.config/autostart/GoXLR_loopback.desktop > /dev/null <<'EOF'
-[Desktop Entry]
-Exec=~/scripts/GoXLR_loopback.sh
-Icon=application-x-shellscript
-Name=GoXLR_loopback.sh
-Type=Application
-X-KDE-AutostartScript=true
-EOF
+wget -P  /home/$USERNAME/.config/autostart/GoXLR_loopback.desktop https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/autostart/GoXLR_loopback.desktop
+
 sudo chmod 600 /home/$USERNAME/.config/autostart/GoXLR_loopback.desktop
 
-tee /home/$USERNAME/.config/autostart/GoXLR_daemon.desktop > /dev/null <<'EOF'
-[Desktop Entry]
-Exec=goxlr-daemon
-Icon=application-x-shellscript
-Name=goxlr-daemon
-Type=Application
-X-KDE-AutostartScript=true
-EOF
+wget -P  /home/$USERNAME/.config/autostart/GoXLR_daemon.desktop https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/autostart/GoXLR_daemon.desktop
+
 sudo chmod 600 /home/$USERNAME/.config/autostart/GoXLR_daemon.desktop
 chown -R "$USERNAME:$USERNAME" /home/$USERNAME/.config/autostart/
     fi
