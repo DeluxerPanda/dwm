@@ -11,7 +11,7 @@ Jag tar inget ansvar för eventuella skador, instabilitet eller dataförlust som
 
 ### Aesthetic  -- [Source](https://store.kde.org/p/2142488)
 
-<img src="https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/Aesthetic.png">
+<img src="https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/Aesthetic/Aesthetic.png">
 
 ### Cartoon Girl -- [Source](https://store.kde.org/p/2142488)
 
