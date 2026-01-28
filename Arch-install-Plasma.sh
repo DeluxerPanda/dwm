@@ -4,6 +4,7 @@
 exec > >(tee -i archsetup.txt)
 exec 2>&1
 export GIT_DIR="$(pwd)"
+export MSIBORD=$(cat /sys/class/dmi/id/board_vendor 2>/dev/null)
 echo -ne "
 -------------------------------------------------------------------------
                                                               
@@ -138,36 +139,6 @@ echo -ne "
 ------------------------------------------------------------------------
 "
 }
-# @description This function will handle file systems. At this movement we are handling only btrfs.
-filesystem () {
-    export FS=btrfs
-}
-
-# @description Detects and sets timezone.
-timezone () {
-    export TIMEZONE="Europe/Stockholm"
-    }
-# @description Set user's keyboard mapping.
-keymap () {
-    export KEYMAP="sv"
-}
-
-    MSI_motherboard () {
-    echo -ne "
-    Do you have an MSI motherboard?
-    "
-
-    options=("yes" "no")
-    select_option "${options[@]}"
-
-    case $? in
-        0)
-        export MSIBORD="yes";;
-        1)
-        export MSIBORD="no";;
-        *) echo "Wrong option. Try again"; MSI_motherboard;;
-    esac
-}
 
 # @description Choose whether drive is SSD or not.
 drivessd () {
@@ -281,17 +252,12 @@ logo
 diskpart
 clear
 logo
-filesystem
 clear
 logo
-timezone
-MSI_motherboard
 clear
 logo
-keymap
 
 echo "Setting up mirrors for optimal download"
-iso="SE"
 timedatectl set-ntp true
 pacman -Sy
 pacman -S --noconfirm archlinux-keyring #update keyrings to latest to prevent packages failing to install
@@ -302,10 +268,10 @@ pacman -S --noconfirm --needed reflector rsync grub
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
 echo -ne "
 -------------------------------------------------------------------------
-                    Setting up $iso mirrors for faster downloads
+                    Setting up SE mirrors for faster downloads
 -------------------------------------------------------------------------
 "
-reflector -a 48 -c "$iso" --score 5 -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist
+reflector -a 48 -c SE --score 5 -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist
 if [[ $(grep -c "Server =" /etc/pacman.d/mirrorlist) -lt 5 ]]; then #check if there are less than 5 mirrors
     cp /etc/pacman.d/mirrorlist.bak /etc/pacman.d/mirrorlist
 fi
@@ -377,12 +343,10 @@ else
     partition3=${DISK}3
 fi
 
-if [[ "${FS}" == "btrfs" ]]; then
     mkfs.fat -F32 -n "EFIBOOT" "${partition2}"
     mkfs.btrfs -f "${partition3}"
     mount -t btrfs "${partition3}" /mnt
     subvolumesetup
-fi
 
 BOOT_UUID=$(blkid -s UUID -o value "${partition2}")
 
@@ -484,20 +448,20 @@ sed -i "s/COMPRESSXZ=(xz -c -z -)/COMPRESSXZ=(xz -c -T $nc -z -)/g" /etc/makepkg
 fi
 echo -ne "
 -------------------------------------------------------------------------
-                    Setup Language to US and set locale
+                    Setup Language to SE and set locale
 -------------------------------------------------------------------------
 "
-sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+sed -i 's/^#sv_SE.UTF-8 UTF-8/sv_SE.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
-timedatectl --no-ask-password set-timezone ${TIMEZONE}
+timedatectl --no-ask-password set-timezone Europe/Stockholm
 timedatectl --no-ask-password set-ntp 1
-localectl --no-ask-password set-locale LANG="en_US.UTF-8" LC_TIME="en_US.UTF-8"
-ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
+localectl --no-ask-password set-locale LANG="sv_SE.UTF-8" LC_TIME="sv_SE.UTF-8"
+ln -s /usr/share/zoneinfo/Europe/Stockholm /etc/localtime
 
 # Set keymaps
-echo "KEYMAP=${KEYMAP}" > /etc/vconsole.conf
-echo "XKBLAYOUT=${KEYMAP}" >> /etc/vconsole.conf
-echo "Keymap set to: ${KEYMAP}"
+loadkeys sv-latin1
+echo "KEYMAP=sv-latin1" > /etc/vconsole.conf
+echo "XKBLAYOUT=se" >> /etc/vconsole.conf
 
 # Add sudo no password rights
 sed -i 's/^# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
@@ -604,7 +568,7 @@ fi
 
     mkdir -p "/boot/grub/themes/CartoonGirl"
 
-    cp -a ${GIT_DIR}/config/CartoonGirl/* "/boot/grub/themes/CartoonGirl"
+    cp -a $GIT_DIR/config/CartoonGirl/* "/boot/grub/themes/CartoonGirl"
 
     sed -i '/^GRUB_TIMEOUT=/c\GRUB_TIMEOUT=60' /etc/default/grub
 
@@ -616,10 +580,24 @@ echo -e "Updating grub..."
 
     echo -e "All set!"
 
-if [[ "$MSIBORD" == "yes" ]]; then
+if [[ "$MSIBORD" == *"MSI"* || "$MSIBORD" == *"Micro-Star"* ]]; then
     mkdir -p /boot/EFI/Microsoft/Boot/
     cp /boot/EFI/BOOT/BOOTX64.EFI /boot/EFI/Microsoft/Boot/bootmgfw.efi
 fi
+
+echo -ne "
+-------------------------------------------------------------------------
+                    Dekstop Environment Setup and Essentials packages
+-------------------------------------------------------------------------
+"
+pacman -Sy --noconfirm
+pacman -S --needed --noconfirm kdeconnect starship bash-completion bat fastfetch btop pavucontrol mpv firefox feh flameshot plasma sddm konsole kate dolphin ark nfs-utils nano usbutils gnome-keyring fuse ffmpeg flatpak steam
+
+wget -P /home/$USERNAME/Desktop/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/SetupConfigs.sh
+
+chown "$USERNAME:$USERNAME" /home/$USERNAME/Desktop/SetupConfigs.sh
+chmod +x /home/$USERNAME/Desktop/SetupConfigs.sh
+
 
 echo -ne "
 -------------------------------------------------------------------------
@@ -637,20 +615,6 @@ systemctl enable reflector.timer
 echo "  Reflector enabled"
 systemctl enable sddm.service
 echo "  Sddm enabled"
-
-echo -ne "
--------------------------------------------------------------------------
-                    Dekstop Environment Setup and Essentials packages
--------------------------------------------------------------------------
-"
-pacman -Sy --noconfirm
-pacman -S --needed --noconfirm kdeconnect starship bash-completion bat fastfetch btop pavucontrol mpv firefox feh flameshot plasma konsole kate dolphin ark nfs-utils nano usbutils gnome-keyring fuse ffmpeg flatpak steam
-
-wget -P /home/$USERNAME/Desktop/ https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/SetupConfigs.sh
-
-chown "$USERNAME:$USERNAME" /home/$USERNAME/Desktop/SetupConfigs.sh
-chmod +x /home/$USERNAME/Desktop/SetupConfigs.sh
-
 
 echo -ne "
 -------------------------------------------------------------------------
