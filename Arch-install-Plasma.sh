@@ -235,7 +235,7 @@ userinfo () {
 grubtheme () {
     echo -ne "  
     -----------------------------------------------------------------------
-                        Välj ett grub-tema                    
+                        Välj ett grub tema                    
     -----------------------------------------------------------------------
     1) Cartoon Girl
     2) Aesthetic
@@ -280,7 +280,7 @@ dualGPU_check () {
 fastfetch_theme () {
         echo -ne "  
     -----------------------------------------------------------------------
-                        Välj ett Fastfetch-tema                    
+                        Välj ett Fastfetch tema                    
     -----------------------------------------------------------------------
     1) Transgender Flagga
     2) Non-binary Flagga
@@ -300,6 +300,29 @@ fastfetch_theme () {
     esac
 }
 
+starship_theme () {
+        echo -ne "  
+    -----------------------------------------------------------------------
+                        Välj ett Starship tema                    
+    -----------------------------------------------------------------------
+    1) Transgender (kommer snart)
+    2) Non-binary
+    3) none (standard)
+    -----------------------------------------------------------------------
+    "
+    options=("Transgender Flag" "Nonbinary Flag")
+    select_option "${options[@]}"
+    case $? in
+        0)
+        export STARSHIP="Transgender";;
+        1)
+        export STARSHIP="Nonbinary";;
+        2)
+        export STARSHIP="none";;
+        *) echo "Fel alternativ. Försök igen."; starship_theme;;
+    esac
+}
+
 # Starting functions
 background_checks
 clear
@@ -311,6 +334,9 @@ grubtheme
 clear
 logo
 fastfetch_theme
+clear
+logo
+starship_theme
 clear
 logo
 dualGPU_check
@@ -697,6 +723,13 @@ if [ "$FASTFETCH" == "Transgender" ]; then
 elif [ "$FASTFETCH" == "Nonbinary" ]; then
     wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/fastfetch/nonbinary/config.jsonc -O /home/$USERNAME/.config/fastfetch/config.jsonc
     wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/fastfetch/nonbinary/nonbinary.txt -O /home/$USERNAME/.config/fastfetch/nonbinary.txt
+fi
+
+
+if [ "$STARSHIP" == "Transgender" ]; then
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/starship/transgender/starship.toml -O /home/$USERNAME/.config/starship.toml
+elif [ "$STARSHIP" == "Nonbinary" ]; then
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/starship/nonbinary/starship.toml -O /home/$USERNAME/.config/starship.toml
 fi
 
 chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
