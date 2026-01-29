@@ -15,7 +15,7 @@ Jag tar inget ansvar för eventuella skador, instabilitet eller dataförlust som
 
 ### Cartoon Girl -- [Source](https://store.kde.org/p/2142488)
 
-<img src="https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/Cartoon%20Girl.png">
+<img src="https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/Cartoon_Girl.png">
 
 ---
 
