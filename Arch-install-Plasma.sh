@@ -648,7 +648,7 @@ echo "  Reflector enabled"
 #-------------------------------------------------------------------------
 
 pacman -Sy --noconfirm
-pacman -S --needed --noconfirm kdeconnect starship bash-completion bat fastfetch btop pavucontrol mpv firefox feh flameshot plasma sddm konsole kate dolphin ark nfs-utils nano usbutils gnome-keyring fuse ffmpeg flatpak steam
+pacman -S --needed --noconfirm kdeconnect starship bash-completion bat fastfetch btop pavucontrol mpv firefox feh plasma sddm konsole kate dolphin ark nfs-utils nano usbutils gnome-keyring fuse ffmpeg flatpak steam
 
 systemctl enable sddm.service
 echo "  Sddm enabled"
