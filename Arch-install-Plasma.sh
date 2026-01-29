@@ -4,6 +4,7 @@
 exec > >(tee -i archsetup.txt)
 exec 2>&1
 export MSIBORD=$(cat /sys/class/dmi/id/board_vendor 2>/dev/null)
+loadkeys sv-latin1
 echo -ne "
 -------------------------------------------------------------------------
 
