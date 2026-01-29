@@ -287,7 +287,7 @@ fastfetch_theme () {
     3) inget tema
     -----------------------------------------------------------------------
     "
-    options=("Transgender Flag" "Nonbinary Flag")
+    options=("Transgender Flag" "Nonbinary Flag" "inget tema")
     select_option "${options[@]}"
     case $? in
         0)
@@ -310,7 +310,7 @@ starship_theme () {
     3) inget tema
     -----------------------------------------------------------------------
     "
-    options=("Transgender Flag" "Nonbinary Flag")
+    options=("Transgender Flag" "Nonbinary Flag" "inget tema")
     select_option "${options[@]}"
     case $? in
         0)
