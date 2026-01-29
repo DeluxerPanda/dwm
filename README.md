@@ -29,3 +29,14 @@ Jag tar inget ansvar för eventuella skador, instabilitet eller dataförlust som
 <img src="https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/fastfetch/transgender/transgender_img.png">
 
 </details>
+
+<details>
+<summary style="font-weight: bolder; font-size: 2rem;">🎨 Starship Tema</summary>
+
+### Non-binary
+Kommer snart!
+
+### Transgender  
+Kommer snart!
+
+</details>
