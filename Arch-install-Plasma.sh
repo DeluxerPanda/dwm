@@ -239,7 +239,7 @@ grubtheme () {
     -----------------------------------------------------------------------
     1) Cartoon Girl
     2) Aesthetic
-    3) none (default)
+    3) inget tema
     -----------------------------------------------------------------------
     "
     options=("Cartoon Girl" "Aesthetic" "none")
@@ -284,7 +284,7 @@ fastfetch_theme () {
     -----------------------------------------------------------------------
     1) Transgender Flagga
     2) Non-binary Flagga
-    3) none (standard)
+    3) inget tema
     -----------------------------------------------------------------------
     "
     options=("Transgender Flag" "Nonbinary Flag")
@@ -305,9 +305,9 @@ starship_theme () {
     -----------------------------------------------------------------------
                         Välj ett Starship tema                    
     -----------------------------------------------------------------------
-    1) Transgender (kommer snart)
+    1) Transgender
     2) Non-binary
-    3) none (standard)
+    3) inget tema
     -----------------------------------------------------------------------
     "
     options=("Transgender Flag" "Nonbinary Flag")
