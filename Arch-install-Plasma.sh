@@ -174,7 +174,7 @@ echo -ne "
        do
        PS3='
        Select the disk to install on: '
-       mapfile -t options < <(lsblk -n --output TYPE,KNAME,SIZE | awk '$1=="disk"{print "/dev/"$2"| "$3}')
+       mapfile -t options < <(lsblk -n --output TYPE,KNAME,SIZE | awk '$1=="disk"{print "/dev/"$2" | "$3}')
 
        select_option "${options[@]}"
        disk=${options[$?]%|*}
