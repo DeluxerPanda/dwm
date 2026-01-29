@@ -565,9 +565,6 @@ if [[ "$DUALGPU" == "AMD" ]]; then
 elif echo "${gpu_type}" | grep -E "NVIDIA|GeForce"; then
     echo "Installing NVIDIA drivers: nvidia-open nvidia-open-dkms nvidia-settings nvidia-utils"
     pacman -S --noconfirm --needed nvidia-open nvidia-open-dkms nvidia-settings nvidia-utils
-    mkdir -p /etc/modprobe.d/
-    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/modprobe/nvidia.conf -O /etc/modprobe.d/nvidia.conf
-    sed -i 's/^MODULES=(/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm /' /etc/mkinitcpio.conf
 elif echo "${gpu_type}" | grep 'VGA' | grep -E "Radeon"; then
     echo "Installing AMD drivers: xf86-video-amdgpu"
     pacman -S --noconfirm --needed xf86-video-amdgpu
