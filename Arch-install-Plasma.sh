@@ -487,40 +487,40 @@ gpu_type=$(lspci | grep -E "VGA|3D|Display")
 
 arch-chroot /mnt /bin/bash -c "KEYMAP='${KEYMAP}' /bin/bash" <<EOF
 
-echo -ne "
--------------------------------------------------------------------------
-                    Network Setup
--------------------------------------------------------------------------
-"
+
+#-------------------------------------------------------------------------
+#                    Network Setup
+#-------------------------------------------------------------------------
+
 pacman -S --noconfirm --needed networkmanager
 systemctl enable NetworkManager
-echo -ne "
--------------------------------------------------------------------------
-                    Setting up mirrors for optimal download
--------------------------------------------------------------------------
-"
+
+#-------------------------------------------------------------------------
+#                    Setting up mirrors for optimal download
+#-------------------------------------------------------------------------
+
 pacman -S --noconfirm --needed pacman-contrib curl terminus-font
 pacman -S --noconfirm --needed reflector rsync grub arch-install-scripts git ntp wget
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
 
 nc=$(grep -c ^"cpu cores" /proc/cpuinfo)
-echo -ne "
--------------------------------------------------------------------------
-                    You have " $nc" cores. And
-            changing the makeflags for " $nc" cores. Aswell as
-                changing the compression settings.
--------------------------------------------------------------------------
-"
+
+#-------------------------------------------------------------------------
+#                    You have " $nc" cores. And
+#            changing the makeflags for " $nc" cores. Aswell as
+#                changing the compression settings.
+#-------------------------------------------------------------------------
+
 TOTAL_MEM=$(cat /proc/meminfo | grep -i 'memtotal' | grep -o '[[:digit:]]*')
 if [[  $TOTAL_MEM -gt 8000000 ]]; then
 sed -i "s/#MAKEFLAGS=\"-j2\"/MAKEFLAGS=\"-j$nc\"/g" /etc/makepkg.conf
 sed -i "s/COMPRESSXZ=(xz -c -z -)/COMPRESSXZ=(xz -c -T $nc -z -)/g" /etc/makepkg.conf
 fi
-echo -ne "
--------------------------------------------------------------------------
-                    Setup Language to SE and set locale
--------------------------------------------------------------------------
-"
+
+#-------------------------------------------------------------------------
+#                    Setup Language to SE and set locale
+#-------------------------------------------------------------------------
+
 sed -i 's/^#sv_SE.UTF-8 UTF-8/sv_SE.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
 timedatectl --no-ask-password set-timezone Europe/Stockholm
@@ -547,11 +547,11 @@ sed -i 's/^#Color/Color\nILoveCandy/' /etc/pacman.conf
 sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
 pacman -Sy --noconfirm --needed
 
-echo -ne "
--------------------------------------------------------------------------
-                    Installing Microcode
--------------------------------------------------------------------------
-"
+
+#-------------------------------------------------------------------------
+#                    Installing Microcode
+#-------------------------------------------------------------------------
+
 # determine processor type and install microcode
 if grep -q "GenuineIntel" /proc/cpuinfo; then
     echo "Installing Intel microcode"
@@ -563,11 +563,11 @@ else
     echo "Unable to determine CPU vendor. Skipping microcode installation."
 fi
 
-echo -ne "
--------------------------------------------------------------------------
-                    Installing Graphics Drivers
--------------------------------------------------------------------------
-"
+
+#-------------------------------------------------------------------------
+#                    Installing Graphics Drivers
+#-------------------------------------------------------------------------
+
 # Graphics Drivers find and install
 if [[ "$DUALGPU" == "AMD" ]]; then
     echo "Installing AMD drivers: xf86-video-amdgpu"
@@ -584,11 +584,11 @@ elif echo "${gpu_type}" | grep 'VGA' | grep -E "Radeon"; then
     wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/X11/20-amdgpu.conf -O /etc/X11/xorg.conf.d/20-amdgpu.conf
 fi
 
-echo -ne "
--------------------------------------------------------------------------
-                    Adding User
--------------------------------------------------------------------------
-"
+
+#-------------------------------------------------------------------------
+#                    Adding User
+#-------------------------------------------------------------------------
+
 groupadd libvirt
 useradd -m -G wheel,libvirt -s /bin/bash $USERNAME
 echo "$USERNAME created, home directory created, added to wheel and libvirt group, default shell set to /bin/bash"
@@ -596,19 +596,18 @@ echo "$USERNAME:$PASSWORD" | chpasswd
 echo "$USERNAME password set"
 echo $NAME_OF_MACHINE > /etc/hostname
 
-Final Setup and Configurations
-GRUB EFI Bootloader Install & Check
+# Final Setup and Configurations
+# GRUB EFI Bootloader Install & Check
 "
 
 if [[ -d "/sys/firmware/efi" ]]; then
     grub-install --efi-directory=/boot ${DISK} --removable
 fi
 
-echo -ne "
--------------------------------------------------------------------------
-               Creating Grub Boot Menu
--------------------------------------------------------------------------
-"
+#-------------------------------------------------------------------------
+#              Creating Grub Boot Menu
+#-------------------------------------------------------------------------
+
 
 # set kernel parameter for adding splash screen
 sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& splash /' /etc/default/grub
@@ -620,7 +619,6 @@ sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="\(.*\)quiet\(.*\)"/GRUB_CMDLINE_LINUX_DEFA
 
 
 # Copy theme
-    echo -e "Installing theme..."
 
 if [ "$GRUB_THEME" == "CartoonGirl" ]; then
     mkdir -p "/boot/grub/themes/CartoonGirl"
@@ -664,11 +662,11 @@ fi
     echo -e "All set!"
 
 
-echo -ne "
--------------------------------------------------------------------------
-                    Enabling Essential Services
--------------------------------------------------------------------------
-"
+
+#-------------------------------------------------------------------------
+#                    Enabling Essential Services
+#-------------------------------------------------------------------------
+
 ntpd -qg
 systemctl enable ntpd.service
 echo "  NTP enabled"
@@ -679,11 +677,11 @@ echo "  NetworkManager enabled"
 systemctl enable reflector.timer
 echo "  Reflector enabled"
 
-echo -ne "
--------------------------------------------------------------------------
-                    Dekstop Environment Setup and Essentials packages
--------------------------------------------------------------------------
-"
+
+#-------------------------------------------------------------------------
+#                    Dekstop Environment Setup and Essentials packages
+#-------------------------------------------------------------------------
+
 pacman -Sy --noconfirm
 pacman -S --needed --noconfirm kdeconnect starship bash-completion bat fastfetch btop pavucontrol mpv firefox feh flameshot plasma sddm konsole kate dolphin ark nfs-utils nano usbutils gnome-keyring fuse ffmpeg flatpak steam
 
@@ -738,11 +736,11 @@ fi
 
 chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
 
-echo -ne "
--------------------------------------------------------------------------
-                    Cleaning
--------------------------------------------------------------------------
-"
+
+#-------------------------------------------------------------------------
+#                    Cleaning
+#-------------------------------------------------------------------------
+
 # Remove no password sudo rights
 sed -i 's/^%wheel ALL=(ALL) NOPASSWD: ALL/# %wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
 sed -i 's/^%wheel ALL=(ALL:ALL) NOPASSWD: ALL/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
