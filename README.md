@@ -22,10 +22,10 @@ Jag tar inget ansvar för eventuella skador, instabilitet eller dataförlust som
 <details>
 <summary style="font-weight: bolder; font-size: 2rem;">🎨 Fastfetch Tema</summary>
 
-### Non-binary
+### Non-binary flagga
 <img src="https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/fastfetch/nonbinary/nonbinary_img.png">
 
-### Transgender  
+### Transgender flagga  
 <img src="https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/fastfetch/transgender/transgender_img.png">
 
 </details>
@@ -33,10 +33,10 @@ Jag tar inget ansvar för eventuella skador, instabilitet eller dataförlust som
 <details>
 <summary style="font-weight: bolder; font-size: 2rem;">🎨 Starship Tema</summary>
 
-### Non-binary
+### Non-binary flagga
 <img src="https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/starship/nonbinary/nonbinary_img.png">
 
-### Transgender  
+### Transgender flagga  
 <img src="https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/starship/transgender/transgender_img.png">
 
 </details>
