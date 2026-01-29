@@ -649,7 +649,7 @@ systemctl enable sddm.service
 echo "  Sddm enabled"
 wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/SetupConfigs.sh -O /home/$USERNAME/Desktop/SetupConfigs.sh
 
-chown -R "$USERNAME:$USERNAME" /home/$USERNAME/Desktop
+chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop
 chmod +x /home/$USERNAME/Desktop/SetupConfigs.sh
 
 sudo sed -i '/^\[core\]/a\\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n' /etc/pacman.conf
@@ -671,7 +671,7 @@ chmod 600 /home/$USERNAME/.config/autostart/GoXLR_loopback.desktop
 wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/autostart/GoXLR_daemon.desktop -O /home/$USERNAME/.config/autostart/GoXLR_daemon.desktop
 
 chmod 600 /home/$USERNAME/.config/autostart/GoXLR_daemon.desktop
-chown -R "$USERNAME:$USERNAME" /home/$USERNAME/.config
+chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
     fi
 
 echo -ne "
