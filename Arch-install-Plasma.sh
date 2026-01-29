@@ -441,9 +441,9 @@ if ! grep -qs '/mnt' /proc/mounts; then
 fi
 
 if [[ ! -d "/sys/firmware/efi" ]]; then
-    pacstrap /mnt base base-devel linux linux-headers linux-firmware --noconfirm --needed
+    pacstrap /mnt base base-devel linux linux-headers linux-firmware btrfs-progs --noconfirm --needed
 else
-    pacstrap /mnt base base-devel linux linux-headers linux-firmware efibootmgr --noconfirm --needed
+    pacstrap /mnt base base-devel linux linux-headers linux-firmware efibootmgr btrfs-progs --noconfirm --needed
 fi
 echo "keyserver hkp://keyserver.ubuntu.com" >> /mnt/etc/pacman.d/gnupg/gpg.conf
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
@@ -639,6 +639,8 @@ echo -e "Updating grub..."
 
     grub-mkconfig -o /boot/grub/grub.cfg
 
+    mkinitcpio -P
+
 if [[ "$MSIBORD" == *"MSI"* || "$MSIBORD" == *"Micro-Star"* ]]; then
     mkdir -p /boot/EFI/Microsoft/Boot/
     cp /boot/EFI/BOOT/BOOTX64.EFI /boot/EFI/Microsoft/Boot/bootmgfw.efi
@@ -713,7 +715,6 @@ elif [ "$STARSHIP" == "Nonbinary" ]; then
 fi
 
 chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
-
 
 #-------------------------------------------------------------------------
 #                    Städa upp
