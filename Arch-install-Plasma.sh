@@ -16,45 +16,40 @@ echo -ne "
 ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝    ╚═════╝ ╚══════╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝
                                                                              
 -------------------------------------------------------------------------
-                    Automated Arch Linux Installer
--------------------------------------------------------------------------
-
-Verifying Arch Linux ISO is Booted
-
 "
 if [ ! -f /usr/bin/pacstrap ]; then
-    echo "This script must be run from an Arch Linux ISO environment."
+    echo "Det här skriptet måste köras från en Arch Linux ISO-miljö."
     exit 1
 fi
 
 root_check() {
     if [[ "$(id -u)" != "0" ]]; then
-        echo -ne "ERROR! This script must be run under the 'root' user!\n"
+        echo -ne "FEL! Det här skriptet måste köras under användaren 'root'.!\n"
         exit 1
     fi
 }
 
 docker_check() {
     if awk -F/ '$2 == "docker"' /proc/self/cgroup | read -r; then
-        echo -ne "ERROR! Docker container is not supported (at the moment)\n"
+        echo -ne "FEL! Docker-containern stöds inte\n"
         exit 1
     elif [[ -f /.dockerenv ]]; then
-        echo -ne "ERROR! Docker container is not supported (at the moment)\n"
+        echo -ne "FEL! Docker-containern stöds inte\n"
         exit 1
     fi
 }
 
 arch_check() {
     if [[ ! -e /etc/arch-release ]]; then
-        echo -ne "ERROR! This script must be run in Arch Linux!\n"
+        echo -ne "FEL! Det här skriptet måste köras i Arch Linux!\n"
         exit 1
     fi
 }
 
 pacman_check() {
     if [[ -f /var/lib/pacman/db.lck ]]; then
-        echo "ERROR! Pacman is blocked."
-        echo -ne "If not running remove /var/lib/pacman/db.lck.\n"
+        echo "FEL! Pacman är blockerad."
+        echo -ne "Om den inte körs ta bort /var/lib/pacman/db.lck.\n"
         exit 1
     fi
 }
@@ -79,7 +74,7 @@ select_option() {
         fi
 
         if [ $last_selected -eq -1 ]; then
-            echo "Please select an option using the arrow keys and Enter:"
+            echo "Välj ett alternativ med piltangenterna och Enter:"
         fi
         for i in "${!options[@]}"; do
             if [ "$i" -eq $selected ]; then
@@ -141,7 +136,7 @@ echo -ne "
 # @description Choose whether drive is SSD or not.
 drivessd () {
     echo -ne "
-    Is this a solid state (SSD) or hard drive (HDD)?
+    Är detta en solid state-disk (SSD) eller hårddisk (HDD)?
     "
 
     options=("SSD" "HDD")
@@ -160,11 +155,11 @@ drivessd () {
 diskpart () {
 echo -ne "
 ------------------------------------------------------------------------
-    THIS WILL FORMAT AND DELETE ALL DATA ON THE DISK
-    Please make sure you know what you are doing because
-    after formatting your disk there is no way to get data back
-    *****BACKUP YOUR DATA BEFORE CONTINUING*****
-    ***I AM NOT RESPONSIBLE FOR ANY DATA LOSS***
+    DETTA FORMATERAR OCH TAR BORT ALL DATA PÅ DISKEN 
+    Se till att du vet vad du gör eftersom
+    efter att du formaterat din disk finns det inget sätt att få tillbaka data 
+    *****SÄKERHETSSKOPIERA DINA DATA INNAN DU FORTSÄTTER***** 
+    ***JAG ÄR INTE ANSVARIG FÖR NÅGON DATAFÖRUST***
 ------------------------------------------------------------------------
 
 "
@@ -173,7 +168,7 @@ echo -ne "
        while true
        do
        PS3='
-       Select the disk to install on: '
+       Välj vilken disk du vill installera på: '
        mapfile -t options < <(lsblk -n --output TYPE,KNAME,SIZE | awk '$1=="disk"{print "/dev/"$2"|"$3}')
 
        select_option "${options[@]}"
@@ -182,7 +177,7 @@ echo -ne "
           then
                 break
           fi
-          echo -e "\n${disk%|*} is not a viable install drive \n"
+          echo -e "\n${disk%|*} är inte en fungerande installationsenhet \n"
     done
 
     echo -e "\n${disk%|*} selected \n"
@@ -196,25 +191,25 @@ userinfo () {
     # Loop through user input until the user gives a valid username
     while true
     do
-            read -r -p "Please enter username: " username
+            read -r -p "Ange användarnamn: " username
             if [[ "${username,,}" =~ ^[a-z_]([a-z0-9_-]{0,31}|[a-z0-9_-]{0,30}\$)$ ]]
             then
                     break
             fi
-            echo "Incorrect username."
+            echo "ogiltigt användarnamn."
     done
     export USERNAME=$username
 
     while true
     do
-        read -rs -p "Please enter password: " PASSWORD1
+        read -rs -p "Ange lösenord: " PASSWORD1
         echo -ne "\n"
-        read -rs -p "Please re-enter password: " PASSWORD2
+        read -rs -p "Ange lösenord igen: " PASSWORD2
         echo -ne "\n"
         if [[ "$PASSWORD1" == "$PASSWORD2" ]]; then
             break
         else
-            echo -ne "ERROR! Passwords do not match. \n"
+            echo -ne "FEL! Lösenorden matchar inte. \n"
         fi
     done
     export PASSWORD=$PASSWORD1
@@ -222,14 +217,14 @@ userinfo () {
      # Loop through user input until the user gives a valid hostname, but allow the user to force save
     while true
     do
-            read -r -p "Please name your machine: " name_of_machine
+            read -r -p "Namnge din dator: " name_of_machine
             # hostname regex (!!couldn't find spec for computer name!!)
             if [[ "${name_of_machine,,}" =~ ^[a-z][a-z0-9_.-]{0,62}[a-z0-9]$ ]]
             then
                     break
             fi
             # if validation fails allow the user to force saving of the hostname
-            read -r -p "Hostname doesn't seem correct. Do you still want to save it? (y/n)" force
+            read -r -p "namnet verkar inte vara korrekt. Vill du fortfarande använda det?? (y/n)" force
             if [[ "${force,,}" = "y" ]]
             then
                     break
@@ -240,9 +235,8 @@ userinfo () {
 grubtheme () {
     echo -ne "  
     -----------------------------------------------------------------------
-                        Grub Theme Selection                    
+                        Välj ett grub-tema                    
     -----------------------------------------------------------------------
-    Please select a grub theme to install:
     1) Cartoon Girl
     2) Aesthetic
     3) none (default)
@@ -264,9 +258,8 @@ grubtheme () {
 dualGPU_check () {
         echo -ne "  
     -----------------------------------------------------------------------
-                        Main GPU Selection                    
+                        Välj huvud GPU                    
     -----------------------------------------------------------------------
-    Please select a grub theme to install:
     1) Radeon (AMD)
     2) NVIDIA
     -----------------------------------------------------------------------
@@ -287,9 +280,8 @@ dualGPU_check () {
 fastfetch_theme () {
         echo -ne "  
     -----------------------------------------------------------------------
-                        Fastfetch theme Selection                    
+                        Välj ett Fastfetch-tema                    
     -----------------------------------------------------------------------
-    Please select a Fastfetch theme:
     1) Transgender Flag
     2) Nonbinary Flag
     3) none (default)
@@ -339,15 +331,11 @@ pacman -S --noconfirm --needed rsync grub
 if [ ! -d "/mnt" ]; then
     mkdir /mnt
 fi
-echo -ne "
--------------------------------------------------------------------------
-                    Installing Prerequisites
--------------------------------------------------------------------------
-"
+
 pacman -S --noconfirm --needed gptfdisk btrfs-progs glibc
 echo -ne "
 -------------------------------------------------------------------------
-                    Formatting Disk
+                    Formaterar disk
 -------------------------------------------------------------------------
 "
 umount -A --recursive /mnt # make sure everything is unmounted before we start
@@ -367,7 +355,7 @@ partprobe "${DISK}" # reread partition table to ensure it is correct
 # make filesystems
 echo -ne "
 -------------------------------------------------------------------------
-                    Creating Filesystems
+                    Skapar filsystem
 -------------------------------------------------------------------------
 "
 # @description Creates the btrfs subvolumes.
@@ -412,25 +400,20 @@ BOOT_UUID=$(blkid -s UUID -o value "${partition2}")
 
 sync
 if ! mountpoint -q /mnt; then
-    echo "ERROR! Failed to mount ${partition3} to /mnt after multiple attempts."
+    echo "FEL! Misslyckades med att montera ${partition3} till /mnt efter flera försök."
     exit 1
 fi
 mkdir -p /mnt/boot
 mount -U "${BOOT_UUID}" /mnt/boot/
 
 if ! grep -qs '/mnt' /proc/mounts; then
-    echo "Drive is not mounted can not continue"
-    echo "Rebooting in 3 Seconds ..." && sleep 1
-    echo "Rebooting in 2 Seconds ..." && sleep 1
-    echo "Rebooting in 1 Second ..." && sleep 1
+    echo "Enheten är inte monterad, kan inte fortsätta"
+    echo "Omstart på 3 sekunder ..." && sleep 1
+    echo "Omstart på 2 sekunder..." && sleep 1
+    echo "Omstart på 1 sekunder ..." && sleep 1
     reboot now
 fi
 
-echo -ne "
--------------------------------------------------------------------------
-                    Arch Install on Main Drive
--------------------------------------------------------------------------
-"
 if [[ ! -d "/sys/firmware/efi" ]]; then
     pacstrap /mnt base base-devel linux linux-headers linux-firmware --noconfirm --needed
 else
@@ -446,7 +429,7 @@ echo "
 cat /mnt/etc/fstab
 echo -ne "
 -------------------------------------------------------------------------
-                    GRUB BIOS Bootloader Install & Check
+                    GRUB BIOS Bootloader Installation
 -------------------------------------------------------------------------
 "
 if [[ ! -d "/sys/firmware/efi" ]]; then
@@ -454,7 +437,7 @@ if [[ ! -d "/sys/firmware/efi" ]]; then
 fi
 echo -ne "
 -------------------------------------------------------------------------
-                    Checking for low memory systems <8G
+                    Kontrollerar system med lågt minne <8GB
 -------------------------------------------------------------------------
 "
 TOTAL_MEM=$(cat /proc/meminfo | grep -i 'memtotal' | grep -o '[[:digit:]]*')
@@ -479,7 +462,7 @@ arch-chroot /mnt /bin/bash <<EOF
 
 
 #-------------------------------------------------------------------------
-#                    Network Setup
+#                    Nätverksinställningar
 #-------------------------------------------------------------------------
 
 pacman -S --noconfirm --needed networkmanager
@@ -490,12 +473,6 @@ pacman -S --noconfirm --needed rsync grub arch-install-scripts git ntp wget
 
 nc=$(grep -c ^"cpu cores" /proc/cpuinfo)
 
-#-------------------------------------------------------------------------
-#                    You have " $nc" cores. And
-#            changing the makeflags for " $nc" cores. Aswell as
-#                changing the compression settings.
-#-------------------------------------------------------------------------
-
 TOTAL_MEM=$(cat /proc/meminfo | grep -i 'memtotal' | grep -o '[[:digit:]]*')
 if [[  $TOTAL_MEM -gt 8000000 ]]; then
 sed -i "s/#MAKEFLAGS=\"-j2\"/MAKEFLAGS=\"-j$nc\"/g" /etc/makepkg.conf
@@ -503,7 +480,7 @@ sed -i "s/COMPRESSXZ=(xz -c -z -)/COMPRESSXZ=(xz -c -T $nc -z -)/g" /etc/makepkg
 fi
 
 #-------------------------------------------------------------------------
-#                    Setup Language to SE and set locale
+#                    Sätter upp språk
 #-------------------------------------------------------------------------
 
 sed -i 's/^#sv_SE.UTF-8 UTF-8/sv_SE.UTF-8 UTF-8/' /etc/locale.gen
@@ -534,7 +511,7 @@ pacman -Sy --noconfirm --needed
 
 
 #-------------------------------------------------------------------------
-#                    Installing Microcode
+#                    Installerar Microcode
 #-------------------------------------------------------------------------
 
 # determine processor type and install microcode
@@ -550,7 +527,7 @@ fi
 
 
 #-------------------------------------------------------------------------
-#                    Installing Graphics Drivers
+#                    Installera grafikdrivrutiner
 #-------------------------------------------------------------------------
 
 # Graphics Drivers find and install
@@ -573,7 +550,7 @@ fi
 
 
 #-------------------------------------------------------------------------
-#                    Adding User
+#                    Lägger till användare
 #-------------------------------------------------------------------------
 
 groupadd libvirt
@@ -591,7 +568,7 @@ if [[ -d "/sys/firmware/efi" ]]; then
 fi
 
 #-------------------------------------------------------------------------
-#              Creating Grub Boot Menu
+#              Skapa Grub-startmenyn
 #-------------------------------------------------------------------------
 
 
@@ -652,7 +629,7 @@ fi
 
 
 #-------------------------------------------------------------------------
-#                    Enabling Essential Services
+#                    Aktivera viktiga tjänster
 #-------------------------------------------------------------------------
 
 ntpd -qg
@@ -667,7 +644,7 @@ echo "  Reflector enabled"
 
 
 #-------------------------------------------------------------------------
-#                    Dekstop Environment Setup and Essentials packages
+#                    Installation av skrivbordsmiljö och grundläggande paket
 #-------------------------------------------------------------------------
 
 pacman -Sy --noconfirm
@@ -726,7 +703,7 @@ chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
 
 
 #-------------------------------------------------------------------------
-#                    Cleaning
+#                    Städa upp
 #-------------------------------------------------------------------------
 
 # Remove no password sudo rights
