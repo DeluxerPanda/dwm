@@ -125,6 +125,7 @@ select_option() {
 # @description Displays ArchTitus logo
 # @noargs
 logo () {
+    setfont ter-v14b
 # This will be shown on every set as user is progressing
 echo -ne "
 -------------------------------------------------------------------------
@@ -138,10 +139,7 @@ echo -ne "
  ▀▀    ▀▀   ▀▀         ▀▀▀▀▀   ▀▀    ▀▀            ▀▀▀▀▀       ▀▀▀▀▀      ▀▀▀▀    ▀▀▀▀ ▀▀  ▀▀▀  ▀▀▀ 
                                                                                                     
                                                                                                     
-
-------------------------------------------------------------------------
-            Please select presetup settings for your system
-------------------------------------------------------------------------
+-------------------------------------------------------------------------
 "
 }
 
@@ -200,11 +198,11 @@ echo -ne "
 
 setfont_size () {
 pacman -S --noconfirm terminus-font
-setfont ter-v18b
 }
 
 # @description Gather username and password to be used for installation.
 userinfo () {
+    setfont ter-v18b
     # Loop through user input until the user gives a valid username
     while true
     do
@@ -250,6 +248,7 @@ userinfo () {
     export NAME_OF_MACHINE=$name_of_machine
 }
 grubtheme () {
+    setfont ter-v18b
     echo -ne "  
     -----------------------------------------------------------------------
                         Grub Theme Selection                    
@@ -274,6 +273,7 @@ grubtheme () {
 }
 
 dualGPU_check () {
+    setfont ter-v18b
         echo -ne "  
     -----------------------------------------------------------------------
                         Main GPU Selection                    
@@ -297,6 +297,7 @@ dualGPU_check () {
 }
 
 fastfetch_theme () {
+    setfont ter-v18b
         echo -ne "  
     -----------------------------------------------------------------------
                         Fastfetch theme Selection                    
@@ -343,6 +344,7 @@ diskpart
 clear
 logo
 
+setfont ter-v18b
 echo "Setting up mirrors for optimal download"
 timedatectl set-ntp true
 pacman -Sy
@@ -610,23 +612,6 @@ echo "$USERNAME created, home directory created, added to wheel and libvirt grou
 echo "$USERNAME:$PASSWORD" | chpasswd
 echo "$USERNAME password set"
 echo $NAME_OF_MACHINE > /etc/hostname
-
-echo -ne "
--------------------------------------------------------------------------
-                                                                                                    
-    ▄▄                         ▄▄                  ▄▄▄▄▄               ▄▄▄▄                         
-   ████                        ██                  ██▀▀▀██             ▀▀██                         
-   ████     ██▄████   ▄█████▄  ██▄████▄            ██    ██   ▄████▄     ██      ██    ██  ▀██  ██▀ 
-  ██  ██    ██▀      ██▀    ▀  ██▀   ██            ██    ██  ██▄▄▄▄██    ██      ██    ██    ████   
-  ██████    ██       ██        ██    ██            ██    ██  ██▀▀▀▀▀▀    ██      ██    ██    ▄██▄   
- ▄██  ██▄   ██       ▀██▄▄▄▄█  ██    ██            ██▄▄▄██   ▀██▄▄▄▄█    ██▄▄▄   ██▄▄▄███   ▄█▀▀█▄  
- ▀▀    ▀▀   ▀▀         ▀▀▀▀▀   ▀▀    ▀▀            ▀▀▀▀▀       ▀▀▀▀▀      ▀▀▀▀    ▀▀▀▀ ▀▀  ▀▀▀  ▀▀▀ 
-                                                                                                    
-                                                                                                    
-
--------------------------------------------------------------------------
-                    Automated Arch Linux Installer
--------------------------------------------------------------------------
 
 Final Setup and Configurations
 GRUB EFI Bootloader Install & Check
