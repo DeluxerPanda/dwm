@@ -141,6 +141,7 @@ echo -ne "
                                                                                                     
 -------------------------------------------------------------------------
 "
+setfont
 }
 
 # @description Choose whether drive is SSD or not.
