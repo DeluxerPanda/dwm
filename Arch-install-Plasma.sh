@@ -282,9 +282,9 @@ fastfetch_theme () {
     -----------------------------------------------------------------------
                         Välj ett Fastfetch-tema                    
     -----------------------------------------------------------------------
-    1) Transgender Flag
-    2) Nonbinary Flag
-    3) none (default)
+    1) Transgender Flagga
+    2) Non-binary Flagga
+    3) none (standard)
     -----------------------------------------------------------------------
     "
     options=("Transgender Flag" "Nonbinary Flag")
