@@ -687,20 +687,22 @@ wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/SetupConfi
 chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop
 chmod +x /home/$USERNAME/Desktop/SetupConfigs.sh
 
-sh -c 'echo -e "\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist" >> /etc/pacman.conf'
-pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
-pacman-key --lsign-key 3056513887B78AEB
-pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
-pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
-pacman -Syu --noconfirm
-
-pacman -S --noconfirm linux-cachyos linux-cachyos-headers
-
-grub-set-default "Arch Linux, with Linux linux-cachyos"
-grub-mkconfig -o /boot/grub/grub.cfg
 
 if lsusb | grep -q "GoXLRMini"; then
-    pacman -S --noconfirm goxlr-utility
+
+    sudo pacman -S --no --noconfirm --needed base-devel git
+
+    su - "$USERNAME" -c "
+    set -e
+
+    git clone https://aur.archlinux.org/yay.git
+    cd yay
+    makepkg -si
+    cd ..
+    rm -rf yay
+
+    yay -S --sudoloop --noconfirm goxlr-utility
+    "
 
     mkdir -p /home/$USERNAME/.config/autostart
 
@@ -713,8 +715,6 @@ if lsusb | grep -q "GoXLRMini"; then
     wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/autostart/GoXLR_daemon.desktop -O /home/$USERNAME/.config/autostart/GoXLR_daemon.desktop
     chmod 600 /home/$USERNAME/.config/autostart/GoXLR_daemon.desktop
 fi
-
-pacman -S --noconfirm yay
 
 mkdir -p /home/$USERNAME/.config/fastfetch
 if [ "$FASTFETCH" == "Transgender" ]; then
