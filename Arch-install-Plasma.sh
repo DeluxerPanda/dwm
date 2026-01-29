@@ -328,7 +328,7 @@ diskpart
 clear
 logo
 
-echo "Setting up mirrors for optimal download"
+
 timedatectl set-ntp true
 pacman -Sy
 pacman -S --noconfirm archlinux-keyring #update keyrings to latest to prevent packages failing to install
@@ -585,7 +585,6 @@ echo $NAME_OF_MACHINE > /etc/hostname
 
 # Final Setup and Configurations
 # GRUB EFI Bootloader Install & Check
-"
 
 if [[ -d "/sys/firmware/efi" ]]; then
     grub-install --efi-directory=/boot ${DISK} --removable
@@ -602,6 +601,8 @@ sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& splash /' /etc/default/grub
 # remove quiet from grub cmdline
 sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="\(.*\)quiet\(.*\)"/GRUB_CMDLINE_LINUX_DEFAULT="\1\2"/' /etc/default/grub
 
+#Add parallel downloading
+sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
 
 
 
