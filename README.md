@@ -22,7 +22,7 @@ Jag tar inget ansvar för eventuella skador, instabilitet eller dataförlust som
 ## 🚀 **Fastfetch**
 
 ### Non-binary
-<img src="">
+<img src="https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/fastfetch/nonbinary/nonbinary_img.png">
 
 ### Transgender  
-<img src="">
+<img src="https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/fastfetch/transgender/transgender_img.png">
