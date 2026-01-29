@@ -652,7 +652,11 @@ wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/SetupConfi
 chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop
 chmod +x /home/$USERNAME/Desktop/SetupConfigs.sh
 
-sudo sed -i '/^\[core\]/a\\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n' /etc/pacman.conf
+sudo sed -i '/^\[core\]/{n;a\
+\
+[chaotic-aur]\
+Include = /etc/pacman.d/chaotic-mirrorlist\
+}' /etc/pacman.conf
 pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
 pacman-key --lsign-key 3056513887B78AEB
 pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
