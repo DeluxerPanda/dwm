@@ -1,4 +1,4 @@
-desktop-image: "Cartoon Girl.png"
+desktop-image: "Cartoon_Girl.png"
 terminal-font: "Hack Bold 18"
 title-text:""
 terminal-width: "100%"
