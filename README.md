@@ -7,7 +7,7 @@ Jag tar inget ansvar för eventuella skador, instabilitet eller dataförlust som
 
 ---
 
-## 🎨 **GRUB Themes**
+## 🎨 **GRUB Tema**
 
 ### Aesthetic  -- [Source](https://store.kde.org/p/2142488)
 
@@ -19,7 +19,7 @@ Jag tar inget ansvar för eventuella skador, instabilitet eller dataförlust som
 
 ---
 
-## 🚀 **Fastfetch**
+## 🎨 **Fastfetch Tema**
 
 ### Non-binary
 <img src="https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/fastfetch/nonbinary/nonbinary_img.png">
