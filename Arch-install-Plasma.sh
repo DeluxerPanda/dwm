@@ -565,6 +565,7 @@ if [[ "$DUALGPU" == "AMD" ]]; then
 elif echo "${gpu_type}" | grep -E "NVIDIA|GeForce"; then
     echo "Installing NVIDIA drivers: nvidia-open nvidia-open-dkms nvidia-settings nvidia-utils"
     pacman -S --noconfirm --needed nvidia-open nvidia-open-dkms nvidia-settings nvidia-utils
+    mkdir -p /etc/modprobe.d/
     wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/modprobe/nvidia.conf -O /etc/modprobe.d/nvidia.conf
     sed -i 's/^MODULES=(/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm /' /etc/mkinitcpio.conf
 elif echo "${gpu_type}" | grep 'VGA' | grep -E "Radeon"; then
@@ -604,11 +605,6 @@ sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& splash /' /etc/default/grub
 # remove quiet from grub cmdline
 sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="\(.*\)quiet\(.*\)"/GRUB_CMDLINE_LINUX_DEFAULT="\1\2"/' /etc/default/grub
 
-#Add parallel downloading
-sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
-
-
-
 # Copy theme
 
 if [ "$GRUB_THEME" == "CartoonGirl" ]; then
@@ -637,13 +633,11 @@ elif [ "$GRUB_THEME" == "Aesthetic" ]; then
     sed -i 's|^#GRUB_THEME=.*|GRUB_THEME="/boot/grub/themes/Aesthetic/theme.txt"|' /etc/default/grub
 fi
 
-    sed -i '/^GRUB_TIMEOUT=/c\GRUB_TIMEOUT=50' /etc/default/grub
+    sed -i '/^GRUB_TIMEOUT=/c\GRUB_TIMEOUT=30' /etc/default/grub
 
 echo -e "Updating grub..."
 
     grub-mkconfig -o /boot/grub/grub.cfg
-
-    mkinitcpio -P
 
 if [[ "$MSIBORD" == *"MSI"* || "$MSIBORD" == *"Micro-Star"* ]]; then
     mkdir -p /boot/EFI/Microsoft/Boot/
