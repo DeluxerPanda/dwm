@@ -56,16 +56,6 @@ select_option() {
     return $selected
 }
 
-SetupConfig() {
-clear
-    export work_dir="$(pwd)"
-    git clone https://aur.archlinux.org/yay-bin.git
-    cd yay-bin
-    makepkg --noconfirm -si
-    cd ..
-    rm -rf yay-bin
-}
-
 dualGPU(){
 clear
 
@@ -84,7 +74,4 @@ clear
     fi
 }
 
-
-
-    SetupConfig
     dualGPU
