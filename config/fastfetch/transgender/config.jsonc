@@ -50,37 +50,12 @@
         }
     ],
     "logo": {
-        "source": "~/.config/fastfetch/nonbinary.txt",
+        "source": "~/.config/fastfetch/trans.txt",
         "type": "file",
         "color": {
-            "1": "#FCF434",
-            "2": "#FFFFFF",
-            "3": "#9C59D1",
-            "4": "#2C2C2C"
+            "1": "#5BCEFA",
+            "2": "#ffc0cb",
+            "3": "#FFFFFF"
         }
     }
-
 }
-// nonbinary
-    // "logo": {
-    //     "source": "~/.config/fastfetch/nonbinary.txt",
-    //     "type": "file",
-    //     "color": {
-    //         "1": "#FCF434",
-    //         "2": "#FFFFFF",
-    //         "3": "#9C59D1",
-    //         "4": "#2C2C2C"
-    //     }
-    // }
-
-
-// Trans
-    // "logo": {
-    //     "source": "~/.config/fastfetch/trans.txt",
-    //     "type": "file",
-    //     "color": {
-    //         "1": "#5BCEFA",
-    //         "2": "#ffc0cb",
-    //         "3": "#FFFFFF"
-    //     }
-    // }

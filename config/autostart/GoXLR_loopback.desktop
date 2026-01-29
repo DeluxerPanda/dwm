@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=~/scripts/GoXLR_loopback.sh
+Exec=~/.config/autostart/GoXLR_loopback.sh
 Icon=application-x-shellscript
 Name=GoXLR_loopback.sh
 Type=Application

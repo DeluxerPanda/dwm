@@ -63,6 +63,8 @@ background_checks() {
     arch_check
     pacman_check
     docker_check
+    pacman -S --noconfirm --needed terminus-font
+    setfont ter-v18b
 }
 
 select_option() {
@@ -153,7 +155,7 @@ drivessd () {
         export MOUNT_OPTIONS="noatime,compress=zstd,ssd,commit=120";;
         1)
         export MOUNT_OPTIONS="noatime,compress=zstd,commit=120";;
-        *) echo "Wrong option. Try again"; drivessd;;
+        *) echo "Fel alternativ. Försök igen."; drivessd;;
     esac
 }
 
@@ -258,10 +260,56 @@ grubtheme () {
         export GRUB_THEME="Aesthetic";;
         2)
         export GRUB_THEME="none";;
-        *) echo "Wrong option. Try again"; grubtheme;;
+        *) echo "Fel alternativ. Försök igen."; grubtheme;;
     esac                
 }
 
+dualGPU_check () {
+        echo -ne "  
+    -----------------------------------------------------------------------
+                        Main GPU Selection                    
+    -----------------------------------------------------------------------
+    Please select a grub theme to install:
+    1) Radeon (AMD)
+    2) NVIDIA
+    -----------------------------------------------------------------------
+    "
+    if lspci | grep -E "NVIDIA|GeForce" >/dev/null && lspci | grep -E "Radeon" >/dev/null; then
+    options=("Radeon (AMD)" "NVIDIA")
+    select_option "${options[@]}"
+    case $? in
+        0)
+        export DUALGPU="AMD";;
+        1)
+        export DUALGPU="NVIDIA";;
+        *) echo "Fel alternativ. Försök igen."; dualGPU_check;;
+    esac 
+    fi
+}
+
+fastfetch_theme () {
+        echo -ne "  
+    -----------------------------------------------------------------------
+                        Fastfetch theme Selection                    
+    -----------------------------------------------------------------------
+    Please select a Fastfetch theme:
+    1) Transgender Flag
+    2) Nonbinary Flag
+    3) none (default)
+    -----------------------------------------------------------------------
+    "
+    options=("Transgender Flag" "Nonbinary Flag")
+    select_option "${options[@]}"
+    case $? in
+        0)
+        export FASTFETCH="Transgender";;
+        1)
+        export FASTFETCH="Nonbinary";;
+        2)
+        export FASTFETCH="none";;
+        *) echo "Fel alternativ. Försök igen."; fastfetch_theme;;
+    esac
+}
 
 # Starting functions
 background_checks
@@ -273,6 +321,12 @@ logo
 grubtheme
 clear
 logo
+fastfetch_theme
+clear
+logo
+dualGPU_check
+clear
+logo
 diskpart
 clear
 logo
@@ -281,8 +335,7 @@ echo "Setting up mirrors for optimal download"
 timedatectl set-ntp true
 pacman -Sy
 pacman -S --noconfirm archlinux-keyring #update keyrings to latest to prevent packages failing to install
-pacman -S --noconfirm --needed pacman-contrib terminus-font
-setfont ter-v18b
+pacman -S --noconfirm --needed pacman-contrib
 sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
 pacman -S --noconfirm --needed reflector rsync grub
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
@@ -519,7 +572,11 @@ echo -ne "
 -------------------------------------------------------------------------
 "
 # Graphics Drivers find and install
-if echo "${gpu_type}" | grep -E "NVIDIA|GeForce"; then
+if [[ "$DUALGPU" == "AMD" ]]; then
+    echo "Installing AMD drivers: xf86-video-amdgpu"
+    pacman -S --noconfirm --needed xf86-video-amdgpu
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/X11/20-amdgpu.conf -O /etc/X11/xorg.conf.d/20-amdgpu.conf
+elif echo "${gpu_type}" | grep -E "NVIDIA|GeForce"; then
     echo "Installing NVIDIA drivers: nvidia-open nvidia-open-dkms nvidia-settings nvidia-utils"
     pacman -S --noconfirm --needed nvidia-open nvidia-open-dkms nvidia-settings nvidia-utils
     wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/modprobe/nvidia.conf -O /etc/modprobe.d/nvidia.conf
@@ -609,16 +666,16 @@ fi
 
     sed -i '/^GRUB_TIMEOUT=/c\GRUB_TIMEOUT=50' /etc/default/grub
 
-if [[ "$MSIBORD" == *"MSI"* || "$MSIBORD" == *"Micro-Star"* ]]; then
-    mkdir -p /boot/EFI/Microsoft/Boot/
-    cp /boot/EFI/BOOT/BOOTX64.EFI /boot/EFI/Microsoft/Boot/bootmgfw.efi
-fi
-
 echo -e "Updating grub..."
 
     grub-mkconfig -o /boot/grub/grub.cfg
 
     mkinitcpio -P
+
+if [[ "$MSIBORD" == *"MSI"* || "$MSIBORD" == *"Micro-Star"* ]]; then
+    mkdir -p /boot/EFI/Microsoft/Boot/
+    cp /boot/EFI/BOOT/BOOTX64.EFI /boot/EFI/Microsoft/Boot/bootmgfw.efi
+fi
 
     echo -e "All set!"
 
@@ -645,38 +702,57 @@ echo -ne "
 "
 pacman -Sy --noconfirm
 pacman -S --needed --noconfirm kdeconnect starship bash-completion bat fastfetch btop pavucontrol mpv firefox feh flameshot plasma sddm konsole kate dolphin ark nfs-utils nano usbutils gnome-keyring fuse ffmpeg flatpak steam
+
 systemctl enable sddm.service
 echo "  Sddm enabled"
-wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/SetupConfigs.sh -O /home/$USERNAME/Desktop/SetupConfigs.sh
 
+wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/.bashrc -O /home/$USERNAME/.bashrc
+chown $USERNAME:$USERNAME /home/$USERNAME/.bashrc
+
+mkdir -p /home/$USERNAME/Desktop
+wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/SetupConfigs.sh -O /home/$USERNAME/Desktop/SetupConfigs.sh
 chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop
 chmod +x /home/$USERNAME/Desktop/SetupConfigs.sh
 
-sudo sed -i '/^\[core\]/{n;a\
-\
-[chaotic-aur]\
-Include = /etc/pacman.d/chaotic-mirrorlist\
-}' /etc/pacman.conf
+sh -c 'echo -e "\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist" >> /etc/pacman.conf'
 pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
 pacman-key --lsign-key 3056513887B78AEB
-pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
-pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
+pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
 pacman -Syu --noconfirm
 
-    if lsusb | grep -q "GoXLRMini"; then
-        pacman -S --needed --noconfirm goxlr-utility
+pacman -S --noconfirm linux-cachyos linux-cachyos-headers
 
-mkdir -p /home/$USERNAME/.config/autostart
+grub-set-default "Arch Linux, with Linux linux-cachyos"
+grub-mkconfig -o /boot/grub/grub.cfg
 
-wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/autostart/GoXLR_loopback.desktop -O /home/$USERNAME/.config/autostart/GoXLR_loopback.desktop
+if lsusb | grep -q "GoXLRMini"; then
+    pacman -S --noconfirm goxlr-utility
 
-chmod 600 /home/$USERNAME/.config/autostart/GoXLR_loopback.desktop
+    mkdir -p /home/$USERNAME/.config/autostart
 
-wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/autostart/GoXLR_daemon.desktop -O /home/$USERNAME/.config/autostart/GoXLR_daemon.desktop
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/scripts/GoXLR_loopback.sh -O /home/$USERNAME/.config/autostart/GoXLR_loopback.sh
+    chmod +x /home/$USERNAME/.config/autostart/GoXLR_loopback.sh
 
-chmod 600 /home/$USERNAME/.config/autostart/GoXLR_daemon.desktop
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/autostart/GoXLR_loopback.desktop -O /home/$USERNAME/.config/autostart/GoXLR_loopback.desktop
+    chmod 600 /home/$USERNAME/.config/autostart/GoXLR_loopback.desktop
+
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/autostart/GoXLR_daemon.desktop -O /home/$USERNAME/.config/autostart/GoXLR_daemon.desktop
+    chmod 600 /home/$USERNAME/.config/autostart/GoXLR_daemon.desktop
+fi
+
+pacman -S --noconfirm yay
+
+mkdir -p /home/$USERNAME/.config/fastfetch
+if [ "$FASTFETCH" == "Transgender" ]; then
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/transgender/config.jsonc -O /home/$USERNAME/.config/fastfetch/config.jsonc
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/transgender/trans.txt -O /home/$USERNAME/.config/fastfetch/trans.txt
+elif [ "$FASTFETCH" == "Nonbinary" ]; then
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/nonbinary/config.jsonc -O /home/$USERNAME/.config/fastfetch/config.jsonc
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/nonbinary/nonbinary.txt -O /home/$USERNAME/.config/fastfetch/nonbinary.txt
+fi
+
 chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
-    fi
 
 echo -ne "
 -------------------------------------------------------------------------

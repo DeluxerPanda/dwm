@@ -120,7 +120,6 @@ function CopyingFiles() {
     # Shell configs
     cp "$work_dir/config/.bash_profile" ~/.bash_profile
     cp "$work_dir/config/.bashrc" ~/.bashrc
-    cp "$work_dir/config/.xinitrc" ~/.xinitrc
 
     # Dark theme
     echo "GTK_THEME=Adwaita:dark" | sudo tee -a /etc/environment > /dev/null
@@ -129,7 +128,7 @@ function CopyingFiles() {
     if lspci | grep -i 'vga' | grep -qi 'amd'; then
         if prompt_yes_no "Vill du konfigurera AMD GPU som primär?"; then
         sudo mkdir -p /etc/X11/xorg.conf.d
-        sudo cp "$work_dir/config/20-amdgpu.conf" /etc/X11/xorg.conf.d/20-amdgpu.conf
+        sudo cp "$work_dir/config/X11/20-amdgpu.conf" /etc/X11/xorg.conf.d/20-amdgpu.conf
         fi
     fi
 

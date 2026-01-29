@@ -70,28 +70,8 @@ dualGPU(){
 clear
 
     # Dual GPU setup (AMD + NVIDIA)
-    if lspci | grep -i 'vga' | grep -qi 'amd' && lspci | grep -i 'vga' | grep -qi 'nvidia'; then
-
-        echo -ne "
-    Vill du konfigurera AMD GPU som primär?
-    "
-
-    options=("Ja" "Nej")
-    select_option "${options[@]}"
-
-    case $? in
-        0)
-            local AMD_main_GPU="yes";;
-        1)
-           local AMD_main_GPU="no";;
-        *) echo "Wrong option. Try again"; drivessd;;
-    esac
-
-
-        if [[ "$AMD_main_GPU" == "yes" ]]; then
-
-        fi
-
+    if lspci | grep -i 'vga' | grep -qi 'Radeon' && lspci | grep -i 'vga' | grep -qi 'nvidia'; then
+        echo "Dual GPU setup detected (AMD + NVIDIA). Setting up quickpassthrough..."
         sudo pacman -S --needed --noconfirm go
         git clone https://github.com/HikariKnight/quickpassthrough.git
         cd quickpassthrough
