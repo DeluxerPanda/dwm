@@ -688,7 +688,7 @@ if lsusb | grep -q "GoXLRMini"; then
 
     mkdir -p /home/$USERNAME/.config/autostart
 
-    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/scripts/GoXLR_loopback.sh -O /home/$USERNAME/.config/autostart/GoXLR_loopback.sh
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/scripts/GoXLR_loopback.sh -O /home/$USERNAME/.config/autostart/GoXLR_loopback.sh
     chmod +x /home/$USERNAME/.config/autostart/GoXLR_loopback.sh
 
     wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/autostart/GoXLR_loopback.desktop -O /home/$USERNAME/.config/autostart/GoXLR_loopback.desktop
