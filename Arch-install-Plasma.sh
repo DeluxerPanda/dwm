@@ -125,7 +125,6 @@ select_option() {
 # @description Displays ArchTitus logo
 # @noargs
 logo () {
-setfont
 # This will be shown on every set as user is progressing
 echo -ne "
 -------------------------------------------------------------------------
@@ -141,7 +140,6 @@ echo -ne "
                                                                                                     
 -------------------------------------------------------------------------
 "
-setfont
 }
 
 # @description Choose whether drive is SSD or not.
@@ -197,13 +195,8 @@ echo -ne "
     drivessd
 }
 
-setfont_size () {
-pacman -S --noconfirm terminus-font
-}
-
 # @description Gather username and password to be used for installation.
 userinfo () {
-    setfont ter-v18b
     # Loop through user input until the user gives a valid username
     while true
     do
@@ -249,7 +242,6 @@ userinfo () {
     export NAME_OF_MACHINE=$name_of_machine
 }
 grubtheme () {
-    setfont ter-v18b
     echo -ne "  
     -----------------------------------------------------------------------
                         Grub Theme Selection                    
@@ -274,7 +266,6 @@ grubtheme () {
 }
 
 dualGPU_check () {
-    setfont ter-v18b
         echo -ne "  
     -----------------------------------------------------------------------
                         Main GPU Selection                    
@@ -298,7 +289,6 @@ dualGPU_check () {
 }
 
 fastfetch_theme () {
-    setfont ter-v18b
         echo -ne "  
     -----------------------------------------------------------------------
                         Fastfetch theme Selection                    
@@ -326,9 +316,6 @@ fastfetch_theme () {
 background_checks
 clear
 logo
-setfont_size
-clear
-logo
 userinfo
 clear
 logo
@@ -345,7 +332,6 @@ diskpart
 clear
 logo
 
-setfont ter-v18b
 echo "Setting up mirrors for optimal download"
 timedatectl set-ntp true
 pacman -Sy
