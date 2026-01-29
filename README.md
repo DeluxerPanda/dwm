@@ -5,9 +5,9 @@ Jag tar inget ansvar för eventuella skador, instabilitet eller dataförlust som
 
 > **Viktigt:** Använd endast dessa script om du vet vad du gör
 
----
 
-## 🎨 **GRUB Tema**
+<details>
+<summary style="font-weight: bolder; font-size: 2rem;"> 🎨 GRUB Tema </summary>
 
 ### Aesthetic  -- [Source](https://store.kde.org/p/2142488)
 
@@ -17,12 +17,15 @@ Jag tar inget ansvar för eventuella skador, instabilitet eller dataförlust som
 
 <img src="https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/Grub/CartoonGirl/Cartoon_Girl.png">
 
----
+</details>
 
-## 🎨 **Fastfetch Tema**
+<details>
+<summary style="font-weight: bolder; font-size: 2rem;">🎨 Fastfetch Tema</summary>
 
 ### Non-binary
 <img src="https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/fastfetch/nonbinary/nonbinary_img.png">
 
 ### Transgender  
 <img src="https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/fastfetch/transgender/transgender_img.png">
+
+</details>
