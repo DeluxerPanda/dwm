@@ -63,8 +63,6 @@ background_checks() {
     arch_check
     pacman_check
     docker_check
-    pacman -S --noconfirm --needed terminus-font
-    setfont ter-v18b
 }
 
 select_option() {
@@ -194,6 +192,11 @@ echo -ne "
     drivessd
 }
 
+setfont_size () {
+pacman -S --noconfirm terminus-font
+setfont ter-v20b
+}
+
 # @description Gather username and password to be used for installation.
 userinfo () {
     # Loop through user input until the user gives a valid username
@@ -313,6 +316,9 @@ fastfetch_theme () {
 
 # Starting functions
 background_checks
+clear
+logo
+setfont_size
 clear
 logo
 userinfo
