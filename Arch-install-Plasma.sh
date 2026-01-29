@@ -692,11 +692,11 @@ pacman -S --noconfirm yay
 
 mkdir -p /home/$USERNAME/.config/fastfetch
 if [ "$FASTFETCH" == "Transgender" ]; then
-    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/transgender/config.jsonc -O /home/$USERNAME/.config/fastfetch/config.jsonc
-    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/transgender/trans.txt -O /home/$USERNAME/.config/fastfetch/trans.txt
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/fastfetch/transgender/config.jsonc -O /home/$USERNAME/.config/fastfetch/config.jsonc
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/fastfetch/transgender/trans.txt -O /home/$USERNAME/.config/fastfetch/trans.txt
 elif [ "$FASTFETCH" == "Nonbinary" ]; then
-    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/nonbinary/config.jsonc -O /home/$USERNAME/.config/fastfetch/config.jsonc
-    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/nonbinary/nonbinary.txt -O /home/$USERNAME/.config/fastfetch/nonbinary.txt
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/fastfetch/nonbinary/config.jsonc -O /home/$USERNAME/.config/fastfetch/config.jsonc
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/fastfetch/nonbinary/nonbinary.txt -O /home/$USERNAME/.config/fastfetch/nonbinary.txt
 fi
 
 chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
