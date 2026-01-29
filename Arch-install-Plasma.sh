@@ -684,20 +684,6 @@ chmod +x /home/$USERNAME/Desktop/SetupConfigs.sh
 
 if lsusb | grep -q "GoXLRMini"; then
 
-    sudo pacman -S --noconfirm --needed base-devel git
-
-    su - "$USERNAME" -c "
-    set -e
-
-    git clone https://aur.archlinux.org/yay.git
-    cd yay
-    makepkg -si
-    cd ..
-    rm -rf yay
-
-    yay -S --sudoloop --noconfirm goxlr-utility
-    "
-
     mkdir -p /home/$USERNAME/.config/autostart
 
     wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/scripts/GoXLR_loopback.sh -O /home/$USERNAME/.config/autostart/GoXLR_loopback.sh

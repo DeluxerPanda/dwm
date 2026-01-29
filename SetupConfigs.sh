@@ -56,6 +56,18 @@ select_option() {
     return $selected
 }
 
+GoXLRMini(){
+clear
+    sudo pacman -S --noconfirm --needed base-devel git
+    git clone https://aur.archlinux.org/yay.git
+    cd yay
+    makepkg -si
+    cd ..
+    rm -rf yay
+
+    yay -S --sudoloop --noconfirm goxlr-utility
+}
+
 dualGPU(){
 clear
 
@@ -74,4 +86,5 @@ clear
     fi
 }
 
+    GoXLRMini
     dualGPU
