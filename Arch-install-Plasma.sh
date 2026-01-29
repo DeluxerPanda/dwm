@@ -334,17 +334,7 @@ pacman -Sy
 pacman -S --noconfirm archlinux-keyring #update keyrings to latest to prevent packages failing to install
 pacman -S --noconfirm --needed pacman-contrib
 sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
-pacman -S --noconfirm --needed reflector rsync grub
-cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-echo -ne "
--------------------------------------------------------------------------
-                    Setting up SE mirrors for faster downloads
--------------------------------------------------------------------------
-"
-reflector -a 48 -c SE --score 5 -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist
-if [[ $(grep -c "Server =" /etc/pacman.d/mirrorlist) -lt 5 ]]; then #check if there are less than 5 mirrors
-    cp /etc/pacman.d/mirrorlist.bak /etc/pacman.d/mirrorlist
-fi
+pacman -S --noconfirm --needed rsync grub
 
 if [ ! -d "/mnt" ]; then
     mkdir /mnt
@@ -485,7 +475,7 @@ fi
 
 gpu_type=$(lspci | grep -E "VGA|3D|Display")
 
-arch-chroot /mnt /bin/bash -c "KEYMAP=sv-latin1 /bin/bash" <<EOF
+arch-chroot /mnt /bin/bash <<EOF
 
 
 #-------------------------------------------------------------------------
