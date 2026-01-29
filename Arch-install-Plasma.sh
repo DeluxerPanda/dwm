@@ -200,7 +200,7 @@ echo -ne "
 
 setfont_size () {
 pacman -S --noconfirm terminus-font
-setfont ter-v20b
+setfont ter-v18b
 }
 
 # @description Gather username and password to be used for installation.
