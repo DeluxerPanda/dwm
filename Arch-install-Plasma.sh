@@ -242,7 +242,7 @@ grubtheme () {
     3) inget tema
     -----------------------------------------------------------------------
     "
-    options=("Cartoon Girl" "Aesthetic" "none")
+    options=("Cartoon Girl" "Aesthetic" "inget tema")
     select_option "${options[@]}"
     case $? in
         0)
