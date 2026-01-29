@@ -690,7 +690,7 @@ chmod +x /home/$USERNAME/Desktop/SetupConfigs.sh
 
 if lsusb | grep -q "GoXLRMini"; then
 
-    sudo pacman -S --no --noconfirm --needed base-devel git
+    sudo pacman -S --noconfirm --needed base-devel git
 
     su - "$USERNAME" -c "
     set -e
