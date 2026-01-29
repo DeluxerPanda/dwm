@@ -485,7 +485,7 @@ fi
 
 gpu_type=$(lspci | grep -E "VGA|3D|Display")
 
-arch-chroot /mnt /bin/bash -c "KEYMAP='${KEYMAP}' /bin/bash" <<EOF
+arch-chroot /mnt /bin/bash -c "KEYMAP=sv-latin1 /bin/bash" <<EOF
 
 
 #-------------------------------------------------------------------------
@@ -495,13 +495,8 @@ arch-chroot /mnt /bin/bash -c "KEYMAP='${KEYMAP}' /bin/bash" <<EOF
 pacman -S --noconfirm --needed networkmanager
 systemctl enable NetworkManager
 
-#-------------------------------------------------------------------------
-#                    Setting up mirrors for optimal download
-#-------------------------------------------------------------------------
-
 pacman -S --noconfirm --needed pacman-contrib curl terminus-font
-pacman -S --noconfirm --needed reflector rsync grub arch-install-scripts git ntp wget
-cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+pacman -S --noconfirm --needed rsync grub arch-install-scripts git ntp wget
 
 nc=$(grep -c ^"cpu cores" /proc/cpuinfo)
 
@@ -572,6 +567,7 @@ fi
 if [[ "$DUALGPU" == "AMD" ]]; then
     echo "Installing AMD drivers: xf86-video-amdgpu"
     pacman -S --noconfirm --needed xf86-video-amdgpu
+    mkdir -p /etc/X11/xorg.conf.d/
     wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/X11/20-amdgpu.conf -O /etc/X11/xorg.conf.d/20-amdgpu.conf
 elif echo "${gpu_type}" | grep -E "NVIDIA|GeForce"; then
     echo "Installing NVIDIA drivers: nvidia-open nvidia-open-dkms nvidia-settings nvidia-utils"
@@ -581,6 +577,7 @@ elif echo "${gpu_type}" | grep -E "NVIDIA|GeForce"; then
 elif echo "${gpu_type}" | grep 'VGA' | grep -E "Radeon"; then
     echo "Installing AMD drivers: xf86-video-amdgpu"
     pacman -S --noconfirm --needed xf86-video-amdgpu
+    mkdir -p /etc/X11/xorg.conf.d/
     wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/X11/20-amdgpu.conf -O /etc/X11/xorg.conf.d/20-amdgpu.conf
 fi
 
