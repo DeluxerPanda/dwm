@@ -558,16 +558,16 @@ fi
 
 # Graphics Drivers find and install
 if [[ "$DUALGPU" == "AMD" ]]; then
-    echo "Installing AMD drivers: xf86-video-amdgpu"
-    pacman -S --noconfirm --needed xf86-video-amdgpu
+    echo "Installing AMD drivers: xf86-video-amdgpu vulkan-radeon"
+    pacman -S --noconfirm --needed xf86-video-amdgpu vulkan-radeon
     mkdir -p /etc/X11/xorg.conf.d/
     wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/X11/20-amdgpu.conf -O /etc/X11/xorg.conf.d/20-amdgpu.conf
 elif echo "${gpu_type}" | grep -E "NVIDIA|GeForce"; then
     echo "Installing NVIDIA drivers: nvidia-open nvidia-open-dkms nvidia-settings nvidia-utils"
     pacman -S --noconfirm --needed nvidia-open nvidia-open-dkms nvidia-settings nvidia-utils
 elif echo "${gpu_type}" | grep 'VGA' | grep -E "Radeon"; then
-    echo "Installing AMD drivers: xf86-video-amdgpu"
-    pacman -S --noconfirm --needed xf86-video-amdgpu
+    echo "Installing AMD drivers: xf86-video-amdgpu vulkan-radeon"
+    pacman -S --noconfirm --needed xf86-video-amdgpu vulkan-radeon
     mkdir -p /etc/X11/xorg.conf.d/
     wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/X11/20-amdgpu.conf -O /etc/X11/xorg.conf.d/20-amdgpu.conf
 fi
@@ -672,46 +672,51 @@ pacman -S --needed --noconfirm kdeconnect starship bash-completion bat fastfetch
 systemctl enable sddm.service
 echo "  Sddm enabled"
 
-wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/.bashrc -O /home/$USERNAME/.bashrc
-chown $USERNAME:$USERNAME /home/$USERNAME/.bashrc
+wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/refs/heads/main/config/.bashrc -O $HOME/.bashrc
+chown $USERNAME:$USERNAME $HOME/.bashrc
 
-mkdir -p /home/$USERNAME/Desktop
-wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/SetupConfigs.sh -O /home/$USERNAME/Desktop/SetupConfigs.sh
-chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop
-chmod +x /home/$USERNAME/Desktop/SetupConfigs.sh
+mkdir -p $HOME/Desktop
+wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/SetupConfigs.sh -O $HOME/Desktop/SetupConfigs.sh
+chown -R $USERNAME:$USERNAME $HOME/Desktop
+chmod +x $HOME/Desktop/SetupConfigs.sh
 
 
 if lsusb | grep -q "GoXLRMini"; then
 
-    mkdir -p /home/$USERNAME/.config/autostart
+    mkdir -p $HOME/.config/autostart
 
-    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/scripts/GoXLR_loopback.sh -O /home/$USERNAME/.config/autostart/GoXLR_loopback.sh
-    chmod +x /home/$USERNAME/.config/autostart/GoXLR_loopback.sh
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/scripts/GoXLR_loopback.sh -O $HOME/.config/autostart/GoXLR_loopback.sh
+    chmod +x $HOME/.config/autostart/GoXLR_loopback.sh
 
-    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/autostart/GoXLR_loopback.desktop -O /home/$USERNAME/.config/autostart/GoXLR_loopback.desktop
-    chmod 600 /home/$USERNAME/.config/autostart/GoXLR_loopback.desktop
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/autostart/GoXLR_loopback.desktop -O $HOME/.config/autostart/GoXLR_loopback.desktop
+    
+    sed -i "s|^Exec=.*|Exec=$HOME/.config/autostart/GoXLR_loopback.sh|" \
+    "$HOME/.config/autostart/GoXLR_loopback.desktop"
 
-    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/autostart/GoXLR_daemon.desktop -O /home/$USERNAME/.config/autostart/GoXLR_daemon.desktop
-    chmod 600 /home/$USERNAME/.config/autostart/GoXLR_daemon.desktop
+
+    chmod 600 $HOME/.config/autostart/GoXLR_loopback.desktop
+
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/autostart/GoXLR_daemon.desktop -O $HOME/.config/autostart/GoXLR_daemon.desktop
+    chmod 600 $HOME/.config/autostart/GoXLR_daemon.desktop
 fi
 
-mkdir -p /home/$USERNAME/.config/fastfetch
+mkdir -p $HOME/.config/fastfetch
 if [ "$FASTFETCH" == "Transgender" ]; then
-    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/fastfetch/transgender/config.jsonc -O /home/$USERNAME/.config/fastfetch/config.jsonc
-    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/fastfetch/transgender/trans.txt -O /home/$USERNAME/.config/fastfetch/trans.txt
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/fastfetch/transgender/config.jsonc -O $HOME/.config/fastfetch/config.jsonc
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/fastfetch/transgender/trans.txt -O $HOME/.config/fastfetch/trans.txt
 elif [ "$FASTFETCH" == "Nonbinary" ]; then
-    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/fastfetch/nonbinary/config.jsonc -O /home/$USERNAME/.config/fastfetch/config.jsonc
-    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/fastfetch/nonbinary/nonbinary.txt -O /home/$USERNAME/.config/fastfetch/nonbinary.txt
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/fastfetch/nonbinary/config.jsonc -O $HOME/.config/fastfetch/config.jsonc
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/fastfetch/nonbinary/nonbinary.txt -O $HOME/.config/fastfetch/nonbinary.txt
 fi
 
 
 if [ "$STARSHIP" == "Transgender" ]; then
-    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/starship/transgender/starship.toml -O /home/$USERNAME/.config/starship.toml
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/starship/transgender/starship.toml -O $HOME/.config/starship.toml
 elif [ "$STARSHIP" == "Nonbinary" ]; then
-    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/starship/nonbinary/starship.toml -O /home/$USERNAME/.config/starship.toml
+    wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/starship/nonbinary/starship.toml -O $HOME/.config/starship.toml
 fi
 
-chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
+chown -R $USERNAME:$USERNAME $HOME/.config
 
 #-------------------------------------------------------------------------
 #                    Städa upp
