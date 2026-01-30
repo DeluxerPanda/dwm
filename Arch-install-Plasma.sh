@@ -558,16 +558,16 @@ fi
 
 # Graphics Drivers find and install
 if [[ "$DUALGPU" == "AMD" ]]; then
-    echo "Installing AMD drivers: xf86-video-amdgpu"
-    pacman -S --noconfirm --needed xf86-video-amdgpu
+    echo "Installing AMD drivers: xf86-video-amdgpu vulkan-radeon"
+    pacman -S --noconfirm --needed xf86-video-amdgpu vulkan-radeon
     mkdir -p /etc/X11/xorg.conf.d/
     wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/X11/20-amdgpu.conf -O /etc/X11/xorg.conf.d/20-amdgpu.conf
 elif echo "${gpu_type}" | grep -E "NVIDIA|GeForce"; then
     echo "Installing NVIDIA drivers: nvidia-open nvidia-open-dkms nvidia-settings nvidia-utils"
     pacman -S --noconfirm --needed nvidia-open nvidia-open-dkms nvidia-settings nvidia-utils
 elif echo "${gpu_type}" | grep 'VGA' | grep -E "Radeon"; then
-    echo "Installing AMD drivers: xf86-video-amdgpu"
-    pacman -S --noconfirm --needed xf86-video-amdgpu
+    echo "Installing AMD drivers: xf86-video-amdgpu vulkan-radeon"
+    pacman -S --noconfirm --needed xf86-video-amdgpu vulkan-radeon
     mkdir -p /etc/X11/xorg.conf.d/
     wget https://raw.githubusercontent.com/DeluxerPanda/Arch-scripts/main/config/X11/20-amdgpu.conf -O /etc/X11/xorg.conf.d/20-amdgpu.conf
 fi
