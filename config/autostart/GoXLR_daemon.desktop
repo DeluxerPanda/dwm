@@ -1,6 +1,6 @@
 [Desktop Entry]
-Exec=goxlr-daemon
-Icon=application-x-shellscript
+Exec=/usr/bin/goxlr-daemon
+Icon=application-x-executable
 Name=goxlr-daemon
 Type=Application
 X-KDE-AutostartScript=true
