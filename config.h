@@ -49,7 +49,7 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title          tags mask   isfloating    monitor */
-	{ "firefox",  NULL,       "Bild-i-bild", 0,          1,            -1 },
+	{ "librewolf",  NULL,       "Bild-i-bild", 0,          1,            -1 },
 	{ NULL,       NULL,       "Event Tester",0,          0,            -1 }, /* xev */
 };
 
