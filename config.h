@@ -11,16 +11,16 @@ static const int showsystray             = 1;        /* 0 means no systray */
 static const int showbar                 = 1;        /* 0 means no bar */
 static const int topbar                  = 1;        /* 0 means bottom bar */
 static const char *fonts[]                = { "JetBrainsMonoNL Nerd Font Mono:size=14:antialias=true:autohint=true:hintstyle=hintfull", "NotoColorEmoji:size=12:antialias=true:autohint=true" };
-static const char col_text[] = "#f8f1e7";
-static const char col_border[]  = "#ff7878"; // Hallween #ff7518 // Crhistmas #ff7878
-static const char col_Sel[]   = "#2e1a47";
-static const char col_Norm[]  = "#541c95";
+static const char col_gray1[] = "#1e222a";
+static const char col_gray2[]  = "#3e4452"; // Hallween #ff7518 // Crhistmas #ff7878
+static const char col_cyan[]   = "#61afef";
+static const char col_white[]  = "#abb2bf";
 
 static const char *colors[][3] = {
-	/*               fg         bg         border   */
-	[SchemeNorm] = { col_text, col_Sel, col_Norm },
-	[SchemeSel]  = { col_text, col_Norm,  col_border },
-	[SchemeURL]  = { col_text, col_Sel,  col_border },
+	/* fg           bg           border   */
+	[SchemeNorm] = { col_white,   col_gray1,   col_gray2 },
+	[SchemeSel]  = { col_gray1,   col_cyan,    col_cyan  },
+	[SchemeURL]  = { col_cyan,    col_gray1,   col_cyan  },
 };
 
 static const char *const autostart[] = {
