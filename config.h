@@ -18,9 +18,9 @@ static const char col_white[]  = "#abb2bf";
 
 static const char *colors[][3] = {
 	/* fg           bg           border   */
-	[SchemeNorm] = { col_white,   col_gray1,   col_gray2 },
-	[SchemeSel]  = { col_gray1,   col_cyan,    col_cyan  },
-	[SchemeURL]  = { col_cyan,    col_gray1,   col_cyan  },
+	[SchemeNorm] = { #abb2bf,   #1e222a,   #3e4452 },
+	[SchemeSel]  = { #1e222a,   #61afef,    #61afef  },
+	[SchemeURL]  = { #61afef,    #1e222a,   #61afef  },
 };
 
 static const char *const autostart[] = {
