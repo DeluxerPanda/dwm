@@ -24,17 +24,17 @@ static const char *colors[][3] = {
 };
 
 static const char *const autostart[] = {
-	"xset", "s", "off", NULL,
-	"xset", "-dpms", NULL,
+    "xset", "s", "off", NULL,
+    "xset", "-dpms", NULL,
     "dbus-update-activation-environment", "--systemd", "--all", NULL,
     "/usr/lib/mate-polkit/polkit-mate-authentication-agent-1", NULL,
     "flameshot", NULL,
     "dunst", NULL,
     "nm-applet", NULL,
-    "goxlr-daemon", NULL,
     "kdeconnectd", NULL,
+    "numlockx", NULL,
     "sh", "-c", "feh --randomize --bg-fill $HOME/Bilder/backgrounds/*", NULL,
-	"sh", "-c", "/usr/bin/dex -a", NULL,
+    "sh", "-c", "/usr/bin/dex -a", NULL,
     NULL /* terminate */
 };
 
