@@ -18,9 +18,9 @@ static const char col_white[]  = "#abb2bf";
 
 static const char *colors[][3] = {
 	/* fg           bg           border   */
-	[SchemeNorm] = { #abb2bf,   #1e222a,   #3e4452 },
-	[SchemeSel]  = { #1e222a,   #61afef,    #61afef  },
-	[SchemeURL]  = { #61afef,    #1e222a,   #61afef  },
+	[SchemeNorm] = { col_white,   col_gray1,   col_gray2 },
+	[SchemeSel]  = { col_gray1,   col_cyan,    col_cyan  },
+	[SchemeURL]  = { col_cyan,    col_gray1,   col_cyan  },
 };
 
 static const char *const autostart[] = {
@@ -30,13 +30,11 @@ static const char *const autostart[] = {
     "/usr/lib/mate-polkit/polkit-mate-authentication-agent-1", NULL,
     "flameshot", NULL,
     "dunst", NULL,
-	"nm-applet", NULL,
-	"goxlr-daemon", NULL,
-	"kdeconnectd", NULL,
+    "nm-applet", NULL,
+    "goxlr-daemon", NULL,
+    "kdeconnectd", NULL,
     "sh", "-c", "feh --randomize --bg-fill $HOME/Bilder/backgrounds/*", NULL,
-    "sh", "-c", "/usr/bin/dex -a", NULL,
-	"sh", "-c", "$HOME/scripts/screenlayout_default.sh", NULL,
-	"sh", "-c", "$HOME/scripts/GoXLR_loopback.sh", NULL,
+	"sh", "-c", "/usr/bin/dex -a", NULL,
     NULL /* terminate */
 };
 
