@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=dwm-delux
+Comment=Dynamic window manager (dwm-delux)
+Exec=/usr/local/bin/dwm
+Icon=dwm
+Type=XSession
