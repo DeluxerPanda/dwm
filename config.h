@@ -33,6 +33,7 @@ static const char *const autostart[] = {
     "nm-applet", NULL,
     "kdeconnectd", NULL,
     "numlockx", NULL,
+	"setxkbmap", "se", NULL,
     "sh", "-c","XDG_MENU_PREFIX=arch- kbuildsycoca6", NULL,	
     "sh", "-c", "feh --randomize --bg-fill $HOME/Bilder/backgrounds/*", NULL,
     "sh", "-c", "/usr/bin/dex -a", NULL,
